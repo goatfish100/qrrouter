@@ -2,18 +2,48 @@ package main
 
 import (
 	"fmt"
-	"html"
 	"log"
 	"net/http"
-	s "strings"
 	"time"
 
+	"testing"
+
 	"github.com/gorilla/mux"
+	"github.com/gorilla/sessions"
 	"github.com/vulcand/oxy/forward"
 	"github.com/vulcand/oxy/testutils"
+	"gopkg.in/mgo.v2"
+	"gopkg.in/mgo.v2/bson"
 )
 
+var store = sessions.NewCookieStore([]byte("something-very-secret"))
+var session, err = mgo.Dial("localhost")
+
+// if err != nil {
+// 	panic(err)
+// }
+// defer session.Close()
+
+type Resource struct {
+	Id          string
+	Description string
+	Protected   string
+	Action      string
+	Address     string
+}
+
 func main() {
+
+	// Optional. Switch the session to a monotonic behavior.
+	session.SetMode(mgo.Monotonic, true)
+
+	c := session.DB("test4").C("res")
+	err = c.Insert(&Resource{"1", "test", "false", "forward", "https://www.yahoo.com"},
+		&Resource{"2", "test", "false", "forward", "https://www.yahoo.com"})
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	r := mux.NewRouter()
 	r.HandleFunc("/", HomeHandler)
 	r.HandleFunc("/uuid/{key}", UUIDHandler)
@@ -35,20 +65,47 @@ func main() {
 	log.Fatal(srv.ListenAndServe())
 }
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello, %q", html.EscapeString(r.URL.Path))
+	// for relative urls - we need to get the resource
+	// so we can proxy/server it -- aka
+	// if a request comes in as /images/image1.jpg
+	// we need to forward to http://resource.com/images/image1.jpg
+	fmt.Println("HomeHandler")
+	session, err := store.Get(r, "resource")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Retrieve our struct and type-assert it
+	val := session.Values["redirection_url"]
+	fmt.Println(val)
 }
 
 // This handler is to handle _ send resource on thier way
 func UUIDHandler(w http.ResponseWriter, r *http.Request) {
-	//fmt.Fprintf(w, "Hello, %q", html.EscapeString(r.URL.Path))
-	// Forwards incoming requests to whatever location URL points to, adds proper forwarding headers
-	var rediruri string = retURL(s.TrimPrefix(r.RequestURI, "/"))
-	fmt.Println(rediruri)
-	r.URL = testutils.ParseURI(rediruri)
+	fmt.Println("inside UUIDHandler")
+
+	vars := mux.Vars(r)
+
+	result := FetchResource(vars["key"])
+
+	fmt.Println(result.Address)
+
+	r.URL = testutils.ParseURI(result.Address)
 	r.RequestURI = ""
 	fwd, _ := forward.New()
 	fwd.ServeHTTP(w, r)
+}
 
+func FetchResource(resourceid string) Resource {
+	c := session.DB("test4").C("res")
+	result := Resource{}
+	err = c.Find(bson.M{"id": resourceid}).One(&result)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	return result
 }
 
 // This handler is to handle _ send resource on thier way
@@ -69,4 +126,11 @@ func retURL(lookup string) string {
 	elements["uuid/071392a13c1d"] = "https://www.yahoo.com"
 
 	return elements[lookup]
+}
+
+func TestEngine(t *testing.T) {
+	var s string = retURL("uuid/f793511c83c3")
+	if s == "" {
+		t.Error("https://www.google.com", "got", s)
+	}
 }
