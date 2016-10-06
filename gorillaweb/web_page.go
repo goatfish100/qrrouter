@@ -34,16 +34,6 @@ type Resource struct {
 
 func main() {
 
-	// Optional. Switch the session to a monotonic behavior.
-	session.SetMode(mgo.Monotonic, true)
-
-	c := session.DB("test4").C("res")
-	err = c.Insert(&Resource{"1", "test", "false", "forward", "https://www.yahoo.com"},
-		&Resource{"2", "test", "false", "forward", "https://www.yahoo.com"})
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	r := mux.NewRouter()
 	r.HandleFunc("/", HomeHandler)
 	r.HandleFunc("/uuid/{key}", UUIDHandler)
