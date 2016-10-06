@@ -22,7 +22,17 @@ This is the main repo - and info wiki for the QR Helper
 * Code review
 * Other guidelines
 
-### Who do I talk to? ###
+### Gollum Wiki ###
 
-* Repo owner or admin
-* Other community or team contact
+* This instance pulled with docker instance from docker hub
+* dependency - docker and local git? (may be in Docker instance)
+1st step choose local/machine folder where files are stored and git initialize the folder
+mkdir gollumwiki
+cd gollumwiki
+git init
+now - you are ready to run the wiki
+docker run -v `pwd`:/wiki -p 4567:80 gollum
+... the docker image is now running on port 80 - internally - but serving on port 4567
+http://localhost:4567 - is the addresss you can reach gollum/docker image at
+
+* Saving the instance #docker save gollum > gollum.tar
