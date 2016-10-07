@@ -6,8 +6,6 @@ import (
 	"net/http"
 	"time"
 
-	"testing"
-
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
 	"github.com/vulcand/oxy/forward"
@@ -35,13 +33,14 @@ type Resource struct {
 func main() {
 
 	r := mux.NewRouter()
-	r.HandleFunc("/", HomeHandler)
+	r.HandleFunc(`/{[a-zA-Z0-9=\-\/\//]+	}`, HomeHandler)
+
 	r.HandleFunc("/uuid/{key}", UUIDHandler)
 	r.HandleFunc("/forward/{key}", ForwardHandler)
 	// r.HandleFunc("/products", ProductsHandler)
 	// r.HandleFunc("/articles", ArticlesHandler)
 	http.Handle("/", r)
-
+	r.NotFoundHandler = http.HandlerFunc(HomeHandler)
 	// This will serve files under http://localhost:8000/static/<filename>
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("/home/jamesl/temp2"))))
 	srv := &http.Server{
@@ -60,15 +59,30 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	// if a request comes in as /images/image1.jpg
 	// we need to forward to http://resource.com/images/image1.jpg
 	fmt.Println("HomeHandler")
-	session, err := store.Get(r, "resource")
+	session, err := store.Get(r, "gorillasession")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	// Retrieve our struct and type-assert it
-	val := session.Values["redirection_url"]
-	fmt.Println(val)
+	val := session.Values["redirection_url"].(string)
+	fmt.Println("redirection url", val)
+	fmt.Println("requested url", r.URL.String())
+	//describe(val)
+
+	//itemaddress = val + r.URL.String()
+	fmt.Println(val + r.URL.String())
+	r.URL = testutils.ParseURI(val + r.URL.String())
+	// // r.RequestURI = ""
+	// //
+	fwd, _ := forward.New()
+	fwd.ServeHTTP(w, r)
+
+}
+
+func describe(i interface{}) {
+	fmt.Printf("(%v, %T)\n", i, i)
 }
 
 // This handler is to handle _ send resource on thier way
@@ -76,13 +90,22 @@ func UUIDHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("inside UUIDHandler")
 
 	vars := mux.Vars(r)
-
 	result := FetchResource(vars["key"])
-
 	fmt.Println(result.Address)
-
+	var saddress string = result.Address
 	r.URL = testutils.ParseURI(result.Address)
 	r.RequestURI = ""
+
+	session, err := store.Get(r, "gorillasession")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Set some session values.
+	session.Values["redirection_url"] = saddress
+	session.Save(r, w)
+
 	fwd, _ := forward.New()
 	fwd.ServeHTTP(w, r)
 }
@@ -105,22 +128,4 @@ func ForwardHandler(w http.ResponseWriter, r *http.Request) {
 	r.RequestURI = ""
 	http.Redirect(w, r, "https://www.google.com", http.StatusFound)
 
-}
-func retURL(lookup string) string {
-	elements := make(map[string]string)
-	//missing resources
-	elements["uuid/f793511c83c3"] = "https://www.google.com"
-	//linked in works ...
-	elements["uuid/071392a13c1b"] = "https://www.linkedin.com"
-	//missing resources
-	elements["uuid/071392a13c1d"] = "https://www.yahoo.com"
-
-	return elements[lookup]
-}
-
-func TestEngine(t *testing.T) {
-	var s string = retURL("uuid/f793511c83c3")
-	if s == "" {
-		t.Error("https://www.google.com", "got", s)
-	}
 }
