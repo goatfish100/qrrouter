@@ -37,12 +37,11 @@ func main() {
 
 	r.HandleFunc("/uuid/{key}", UUIDHandler)
 	r.HandleFunc("/forward/{key}", ForwardHandler)
-	// r.HandleFunc("/products", ProductsHandler)
-	// r.HandleFunc("/articles", ArticlesHandler)
+	r.HandleFunc("/test/", TestHandler)
 	http.Handle("/", r)
 	r.NotFoundHandler = http.HandlerFunc(HomeHandler)
 	// This will serve files under http://localhost:8000/static/<filename>
-	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("/home/jamesl/temp2"))))
+	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("/home/jamesl/asdfdsfd"))))
 	srv := &http.Server{
 		Handler: r,
 		Addr:    "localhost:8000",
@@ -52,6 +51,10 @@ func main() {
 	}
 
 	log.Fatal(srv.ListenAndServe())
+}
+
+func TestHandler(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("Gorilla!\n"))
 }
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	// for relative urls - we need to get the resource
