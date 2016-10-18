@@ -15,5 +15,5 @@ switched to db jldatabase
 
 backup - data and restore
 
-2011  mongoexport --db test4 --collection res --out resources.json
-2016  mongoimport --db test4 --collection res --file resources.json
+mongoexport --db resources --collection res --out resources.json
+mongoimport --db resources --collection res --file resources.json
