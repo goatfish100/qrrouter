@@ -114,7 +114,7 @@ func UUIDHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func FetchResource(resourceid string) Resource {
-	c := session.DB("test4").C("res")
+	c := session.DB("resources").C("res")
 	result := Resource{}
 	err = c.Find(bson.M{"id": resourceid}).One(&result)
 
