@@ -9,8 +9,26 @@ This is the main repo - and info wiki for the QR Helper
 
 ### How do I get set up? ###
 
-* Summary of set up
-1
+
+* Install Golang
+* On Mac - done with brew
+* brew install golang
+* create folder gowork under home folder
+* add line export GOPATH=/Users/jamesl/gowork to .bash_profile 
+* make folder src/bitbucket.org in go path 
+* cd into src/bitbucket.org
+* git clone the source into the folder git
+* git clone git@bitbucket.org:goatfish100/gorouter.git
+* git clone 
+53  go get github.com/gorilla/mux
+   54  go get github.com/gorilla/sessions
+   55  go get github.com/vulcand/oxy/forward
+   56  go get github.com/vulcand/oxy/testutils
+   57  go gopkg.in/mgo.v2
+   58  go ge gopkg.in/mgo.v2
+   59  go get gopkg.in/mgo.v2
+   60  go get gopkg.in/mgo.v2/bson
+
 * Configuration
 * Dependencies
 * Database configuration
