@@ -10,6 +10,7 @@ This is the main repo - and info wiki for the QR Helper
 ### How do I get set up? ###
 
 * Summary of set up
+1
 * Configuration
 * Dependencies
 * Database configuration
