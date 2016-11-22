@@ -1,3 +1,0 @@
-{ "_id" : { "$oid" : "57f5425379f0787faea00c71" }, "id" : "1", "description" : "test", "protected" : "false", "action" : "forward", "address" : "https://www.yahoo.com" }
-{ "_id" : { "$oid" : "57f5425379f0787faea00c72" }, "id" : "2", "description" : "test", "protected" : "false", "action" : "forward", "address" : "https://www.google.com" }
-{ "_id" : { "$oid" : "57f543cf79f0787faea00c73" }, "id" : "3", "description" : "test", "protected" : "false", "action" : "forward", "address" : "https://www.linkedin.com" }
