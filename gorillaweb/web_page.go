@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -40,8 +41,8 @@ func main() {
 	r.HandleFunc("/test/", TestHandler)
 	http.Handle("/", r)
 	r.NotFoundHandler = http.HandlerFunc(HomeHandler)
-	// This will serve files under http://localhost:8000/static/<filename>
-	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("/home/jamesl/asdfdsfd"))))
+	r.PathPrefix("/").Handler(http.FileServer(http.Dir("./static/")))
+
 	srv := &http.Server{
 		Handler: r,
 		Addr:    "localhost:8000",
@@ -93,8 +94,9 @@ func UUIDHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("inside UUIDHandler")
 
 	vars := mux.Vars(r)
+	fmt.Println(vars["key"])
 	result := FetchResource(vars["key"])
-	fmt.Println(result.Address)
+	fmt.Println("the address is " + result.Address)
 	var saddress string = result.Address
 	r.URL = testutils.ParseURI(result.Address)
 	r.RequestURI = ""
@@ -116,7 +118,8 @@ func UUIDHandler(w http.ResponseWriter, r *http.Request) {
 func FetchResource(resourceid string) Resource {
 	c := session.DB("resources").C("res")
 	result := Resource{}
-	err = c.Find(bson.M{"id": resourceid}).One(&result)
+	number, _ := strconv.Atoi(resourceid)
+	err = c.Find(bson.M{"resourceid": number}).One(&result)
 
 	if err != nil {
 		log.Fatal(err)
