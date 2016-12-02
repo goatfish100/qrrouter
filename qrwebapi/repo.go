@@ -6,8 +6,8 @@ var qrresource QRResource
 
 // Give us some seed data
 func init() {
-	RepoCreateResource(Resource{Description: "yahoo", Protected: "false", Action: "forward", Address: "http://www.yahoo.com"})
-	RepoCreateResource(Resource{Description: "google", Protected: "false", Action: "forward", Address: "https://www.google.com"})
+	RepoCreateResource(Resource{Description: "yahoo", Protected: false, Action: "forward", Address: "http://www.yahoo.com"})
+	RepoCreateResource(Resource{Description: "google", Protected: false, Action: "forward", Address: "https://www.google.com"})
 }
 
 func RepoFindResource(id int) Resource {

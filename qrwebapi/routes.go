@@ -24,4 +24,10 @@ var routes = Routes{
 		"/qrresource/{resourceId}",
 		GetResource,
 	},
+	Route{
+		"ResourceCreate",
+		"POST",
+		"/resourcecreate",
+		ResourceCreate,
+	},
 }
