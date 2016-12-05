@@ -30,4 +30,10 @@ var routes = Routes{
 		"/resourcecreate",
 		ResourceCreate,
 	},
+	Route{
+		"GetOrgs",
+		"GET",
+		"/getorgs",
+		GetOrgs,
+	},
 }

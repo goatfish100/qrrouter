@@ -41,6 +41,19 @@ func GetResource(w http.ResponseWriter, r *http.Request) {
 	}
 
 }
+
+func GetOrgs(w http.ResponseWriter, r *http.Request) {
+
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	w.WriteHeader(http.StatusOK)
+	fmt.Println(orgs)
+	if err := json.NewEncoder(w).Encode(orgs); err != nil {
+		panic(err)
+	}
+	return
+
+}
+
 func ResourceCreate(w http.ResponseWriter, r *http.Request) {
 	var resource Resource
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576))
