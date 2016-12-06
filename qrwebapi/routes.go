@@ -42,4 +42,10 @@ var routes = Routes{
 		"/getorg/{orgId}",
 		GetOrg,
 	},
+	Route{
+		"PostCreateOrg",
+		"post",
+		"/createorg",
+		PostCreateOrg,
+	},
 }
