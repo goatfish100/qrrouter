@@ -36,4 +36,10 @@ var routes = Routes{
 		"/getorgs",
 		GetOrgs,
 	},
+	Route{
+		"GetOrg",
+		"GET",
+		"/getorg/{orgId}",
+		GetOrg,
+	},
 }

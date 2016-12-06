@@ -42,18 +42,37 @@ func GetResource(w http.ResponseWriter, r *http.Request) {
 
 }
 
+// return all orgs
+func GetOrg(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+
+	var orgId int
+	var err error
+	if orgId, err = strconv.Atoi(vars["orgId"]); err != nil {
+		panic(err)
+	}
+	organization := OrgFind(orgId)
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	w.WriteHeader(http.StatusOK)
+	fmt.Println("inside GetOrgs", orgs)
+	if err := json.NewEncoder(w).Encode(organization); err != nil {
+		panic(err)
+	}
+
+}
+
+// return all orgs
 func GetOrgs(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
-	fmt.Println(orgs)
+	fmt.Println("inside GetOrgs", orgs)
 	if err := json.NewEncoder(w).Encode(orgs); err != nil {
 		panic(err)
 	}
 	return
 
 }
-
 func ResourceCreate(w http.ResponseWriter, r *http.Request) {
 	var resource Resource
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576))

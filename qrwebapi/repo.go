@@ -36,30 +36,27 @@ func init() {
 		},
 		},
 	})
+	OrgCreate(Org{
+		Id:         3,
+		Orgname:    "awake Holdings",
+		Address:    "123 H street",
+		City:       "Culver",
+		State:      "CA",
+		Postalcode: "84109",
+		Users: []User{{
+			Username: "freegyg",
+			Email:    "freddy@yahoo.com",
+			Name:     "Freddy G Spot",
+			Password: "lsls",
+		}, {
+			Username: "toyo",
+			Email:    "lsl@yahoo.com",
+			Name:     "asdf",
+			Password: "asdf",
+		},
+		},
+	})
 }
-
-// 	orgs := &Org{
-// 		Id:         2,
-// 		Orgname:    "Rest Holdings",
-// 		Address:    "123 H street",
-// 		City:       "Culver",
-// 		State:      "CA",
-// 		Postalcode: "84109",
-// 		Users: []User{{
-// 			Username: "freegyg",
-// 			Email:    "freddy@yahoo.com",
-// 			Name:     "Freddy G Spot",
-// 			Password: "lsls",
-// 		}, {
-// 			Username: "toyo",
-// 			Email:    "lsl@yahoo.com",
-// 			Name:     "asdf",
-// 			Password: "asdf",
-// 		},
-// 		},
-// 	}
-// 	fmt.Println(orgs)
-// }
 
 func RepoFindResource(id int) Resource {
 	for _, t := range qrresource {
@@ -72,9 +69,6 @@ func RepoFindResource(id int) Resource {
 }
 
 func OrgCreate(o Org) Org {
-	currentId += 1
-	o.Id = currentId
-
 	orgs = append(orgs, o)
 	return o
 }
@@ -88,17 +82,17 @@ func RepoCreateResource(r Resource) Resource {
 }
 
 //this is bad, I don't think it passes race condtions
-func RepoCreateOrg(org Org) Resource {
-	currentId += 1
-	r.Id = currentId
+func RepoCreateOrg(org Org) Org {
 	orgs = append(orgs, org)
-	return r
+	return org
 }
 
-// //this is bad, I don't think it passes race condtions
-// func RepoCreateTodo(t Todo) Todo {
-// 	currentId += 1
-// 	t.Id = currentId
-// 	todos = append(todos, t)
-// 	return t
-// }
+func OrgFind(id int) Org {
+	for _, t := range orgs {
+		if t.Id == id {
+			return t
+		}
+	}
+	// return empty Todo if not found
+	return Org{}
+}
