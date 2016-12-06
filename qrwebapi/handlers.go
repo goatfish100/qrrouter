@@ -54,8 +54,14 @@ func GetOrg(w http.ResponseWriter, r *http.Request) {
 	organization := OrgFind(orgId)
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
-	fmt.Println("inside GetOrgs", orgs)
-	if err := json.NewEncoder(w).Encode(organization); err != nil {
+	fmt.Println("inside GetOrg", orgs)
+	// check if empty array ...
+	if organization.Id == 0 {
+		error := jsonErr{Code: 404, Text: "Not Found"}
+		if err := json.NewEncoder(w).Encode(error); err != nil {
+			panic(err)
+		}
+	} else if err := json.NewEncoder(w).Encode(organization); err != nil {
 		panic(err)
 	}
 
@@ -82,7 +88,6 @@ func PostCreateOrg(w http.ResponseWriter, r *http.Request) {
 	if err := r.Body.Close(); err != nil {
 		panic(err)
 	}
-	fmt.Println(body)
 	if err := json.Unmarshal(body, &organization); err != nil {
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 		w.WriteHeader(422) // unprocessable entity
@@ -91,9 +96,10 @@ func PostCreateOrg(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	OrgCreate(organization)
-  w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	if err := json.NewEncoder(w).Encode("{
-  \"success\": \"true\"}"); err != nil {
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	jsonsuccess := JsonSuccess{Success: "true"}
+
+	if err := json.NewEncoder(w).Encode(jsonsuccess); err != nil {
 		panic(err)
 	}
 	fmt.Println("org is ", organization.Id)

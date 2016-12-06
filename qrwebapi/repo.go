@@ -5,6 +5,8 @@ var currentId int
 var qrresource QRResource
 var orgs Orgs
 
+//var jsonsucess JsonSucess
+
 // Give us some seed data
 func init() {
 	RepoCreateResource(Resource{Description: "yahoo", Protected: false, Action: "forward", Address: "http://www.yahoo.com"})
@@ -56,6 +58,7 @@ func init() {
 		},
 		},
 	})
+
 }
 
 func RepoFindResource(id int) Resource {
