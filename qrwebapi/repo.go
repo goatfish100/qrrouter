@@ -19,7 +19,6 @@ func init() {
 	// 		Name: "2", Password: "3"}})
 	// fmt.Println("inside init")
 	OrgCreate(Org{
-		Id:         2,
 		Orgname:    "Rest Holdings",
 		Address:    "123 H street",
 		City:       "Culver",
@@ -39,7 +38,6 @@ func init() {
 		},
 	})
 	OrgCreate(Org{
-		Id:         3,
 		Orgname:    "awake Holdings",
 		Address:    "123 H street",
 		City:       "Culver",
@@ -72,6 +70,13 @@ func RepoFindResource(id int) Resource {
 }
 
 func OrgCreate(o Org) Org {
+	// Insert Datas
+	c := session.DB("resources").C("orgusers")
+	err = c.Insert(o)
+
+	if err != nil {
+		panic(err)
+	}
 	orgs = append(orgs, o)
 	return o
 }
@@ -88,14 +93,4 @@ func RepoCreateResource(r Resource) Resource {
 func RepoCreateOrg(org Org) Org {
 	orgs = append(orgs, org)
 	return org
-}
-
-func OrgFind(id int) Org {
-	for _, t := range orgs {
-		if t.Id == id {
-			return t
-		}
-	}
-	// return empty Todo if not found
-	return Org{}
 }

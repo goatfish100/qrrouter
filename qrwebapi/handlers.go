@@ -5,11 +5,20 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"strconv"
 
 	"github.com/gorilla/mux"
+
+	"github.com/gorilla/sessions"
+
+	"gopkg.in/mgo.v2"
+	"gopkg.in/mgo.v2/bson"
 )
+
+var store = sessions.NewCookieStore([]byte("something-very-secret"))
+var session, err = mgo.Dial("localhost")
 
 func Index(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "Welcome!\n")
@@ -45,23 +54,29 @@ func GetResource(w http.ResponseWriter, r *http.Request) {
 // return all orgs
 func GetOrg(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
+	log.Printf("%s\t%s\t%s\t%s")
+	c := session.DB("resources").C("orgusers")
+	org := Org{}
+	// number, _ := strconv.Atoi(resourceid)
 
-	var orgId int
-	var err error
-	if orgId, err = strconv.Atoi(vars["orgId"]); err != nil {
-		panic(err)
-	}
-	organization := OrgFind(orgId)
+	//organization := OrgFind(orgId)
+	//err = c.Find(bson.M{"_id": orgId}).One(&org)
+	idQueryier := bson.ObjectIdHex(vars["orgId"])
+	log.Printf("Org identifier%s\t ", idQueryier)
+
+	err = c.Find(bson.M{"_id": idQueryier}).One(&org)
+
+	//bson.M{"_id": bson.ObjectIdHex(orgId)}
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
-	fmt.Println("inside GetOrg", orgs)
+	fmt.Println("inside GetOrg ", org)
 	// check if empty array ...
-	if organization.Id == 0 {
+	if org.Id == "" {
 		error := jsonErr{Code: 404, Text: "Not Found"}
 		if err := json.NewEncoder(w).Encode(error); err != nil {
 			panic(err)
 		}
-	} else if err := json.NewEncoder(w).Encode(organization); err != nil {
+	} else if err := json.NewEncoder(w).Encode(org); err != nil {
 		panic(err)
 	}
 
