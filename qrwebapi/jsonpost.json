@@ -1,0 +1,1 @@
+curl -H "Contect-Type: application/json" -X POST -d {"id":3,"description":"yahoo","protected":false,"action":"forward","address":"http://www.yahoo.com"}` http://localhost:8001/json/
