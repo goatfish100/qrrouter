@@ -1,18 +1,13 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
-	"strconv"
 	"time"
 
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
-	"github.com/vulcand/oxy/forward"
-	"github.com/vulcand/oxy/testutils"
 	"gopkg.in/mgo.v2"
-	"gopkg.in/mgo.v2/bson"
 )
 
 var store = sessions.NewCookieStore([]byte("something-very-secret"))
@@ -23,12 +18,8 @@ var session, err = mgo.Dial("localhost")
 // }
 // defer session.Close()
 
-type Resource struct {
-	Id          string
-	Description string
-	Protected   string
-	Action      string
-	Address     string
+type QRResource struct {
+	Data Resource `json:"data"`
 }
 
 func main() {
@@ -37,12 +28,15 @@ func main() {
 	r.HandleFunc(`/{[a-zA-Z0-9=\-\/\//]+	}`, HomeHandler)
 
 	r.HandleFunc("/uuid/{key}", UUIDHandler)
-	r.HandleFunc("/forward/{key}", ForwardHandler)
-	r.HandleFunc("/test/", TestHandler)
-	http.Handle("/", r)
-	r.NotFoundHandler = http.HandlerFunc(HomeHandler)
-	r.PathPrefix("/").Handler(http.FileServer(http.Dir("./static/")))
+	r.HandleFunc("/getResource/{key}", GetResourceHandler)
 
+	r.HandleFunc("/forward/{key}", ForwardHandler)
+	r.HandleFunc("/test", TestHandler)
+	http.Handle("/", r)
+	//r.NotFoundHandler = http.HandlerFunc(HomeHandler)
+	//r.PathPrefix("/").Handler(http.FileServer(http.Dir("./static/")))
+	//r.PathPrefix("/jlsone/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("/home/jamesl/gowork/src/bitbucket.org/gorillaweb/static"))))
+	r.PathPrefix("/jlsone").Handler(http.FileServer(http.Dir(http.Dir("/home/jamesl/gowork/src/bitbucket.org/gorillaweb/static"))))
 	srv := &http.Server{
 		Handler: r,
 		Addr:    "localhost:8000",
@@ -52,86 +46,4 @@ func main() {
 	}
 
 	log.Fatal(srv.ListenAndServe())
-}
-
-func TestHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Gorilla!\n"))
-}
-func HomeHandler(w http.ResponseWriter, r *http.Request) {
-	// for relative urls - we need to get the resource
-	// so we can proxy/server it -- aka
-	// if a request comes in as /images/image1.jpg
-	// we need to forward to http://resource.com/images/image1.jpg
-	fmt.Println("HomeHandler")
-	session, err := store.Get(r, "gorillasession")
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	// Retrieve our struct and type-assert it
-	val := session.Values["redirection_url"].(string)
-	fmt.Println("redirection url", val)
-	fmt.Println("requested url", r.URL.String())
-	//describe(val)
-
-	//itemaddress = val + r.URL.String()
-	fmt.Println(val + r.URL.String())
-	r.URL = testutils.ParseURI(val + r.URL.String())
-	// // r.RequestURI = ""
-	// //
-	fwd, _ := forward.New()
-	fwd.ServeHTTP(w, r)
-
-}
-
-func describe(i interface{}) {
-	fmt.Printf("(%v, %T)\n", i, i)
-}
-
-// This handler is to handle _ send resource on thier way
-func UUIDHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("inside UUIDHandler")
-
-	vars := mux.Vars(r)
-	fmt.Println(vars["key"])
-	result := FetchResource(vars["key"])
-	fmt.Println("the address is " + result.Address)
-	var saddress string = result.Address
-	r.URL = testutils.ParseURI(result.Address)
-	r.RequestURI = ""
-
-	session, err := store.Get(r, "gorillasession")
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	// Set some session values.
-	session.Values["redirection_url"] = saddress
-	session.Save(r, w)
-
-	fwd, _ := forward.New()
-	fwd.ServeHTTP(w, r)
-}
-
-func FetchResource(resourceid string) Resource {
-	c := session.DB("resources").C("res")
-	result := Resource{}
-	number, _ := strconv.Atoi(resourceid)
-	err = c.Find(bson.M{"resourceid": number}).One(&result)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-	return result
-}
-
-// This handler is to handle _ send resource on thier way
-func ForwardHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("inside forward handler")
-	r.URL = testutils.ParseURI("https://www.google.com")
-	r.RequestURI = ""
-	http.Redirect(w, r, "https://www.google.com", http.StatusFound)
-
 }

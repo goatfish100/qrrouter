@@ -17,3 +17,7 @@ backup - data and restore
 
 mongoexport --db resources --collection res --out resources.json
 mongoimport --db resources --collection res --file resources.json
+
+
+... import a json collection in
+mongoimport --jsonArray -d resources -c orgs orgsusers.json
