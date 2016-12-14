@@ -1,5 +1,6 @@
-{"_id" : 1, "description" : "test", "protected" : "false", "action" : "forward", "address" : "https://www.yahoo.com" }
-{"_id" : ObjectId("584f89b595f3b0c9cab0d38a"), "description" : "test", "protected" : "false", "action" : "forward", "address" : "https://www.google.com" }
-{"_id" : ObjectId("584f89b595f3b0c9cab0d38b"), "description" : "test", "protected" : "false", "action" : "forward", "address" : "https://www.linkedin.com" }
-{"_id" : ObjectId("584f89b595f3b0c9cab0d38c"), "description" : "test", "protected" : "false", "action" : "forward", "address" : "http://localhost:4567/sample-md-file" }
-{"_id" : ObjectId("584f89b595f3b0c9cab0d38d"), "description" : "test", "protected" : "false", "action" : "forward", "address" : "http://localhost:81/Homesdf" }
+{"_id" : ObjectId("584f89b595f3b0c9cab0d38a"), "description" : "test", "protected" : "false", "action" : "redirect", "address" : "https://www.yahoo.com" }
+{"_id" : ObjectId("584f89b595f3b0c9cab0d38x"), "description" : "test", "protected" : "false", "action" : "redirect", "address" : "https://www.google.com" }
+{"_id" : ObjectId("584f89b595f3b0c9cab0d38b"), "description" : "test", "protected" : "false", "action" : "redirect", "address" : "https://www.linkedin.com" }
+{"_id" : ObjectId("584f89b595f3b0c9cab0d38c"), "description" : "test", "protected" : "false", "action" : "redirect", "address" : "http://localhost:4567/sample-md-file" }
+{"_id" : ObjectId("584f89b595f3b0c9cab0d38d"), "description" : "test", "protected" : "false", "action" : "redirect", "address" : "http://localhost:81/Homesdf" }
+{"_id" : ObjectId("584f89b595f3b0c9cab0d38e"), "description" : "test", "protected" : "false", "action" : "forward", "address" : "https://www.google.com" }
