@@ -2,25 +2,22 @@ package main
 
 import (
 	"fmt"
-	"io"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 )
 
 var (
-	server   *httptest.Server
-	reader   io.Reader //Ignore this for now
-	usersUrl string
+	server *httptest.Server
 )
 
 func init() {
-	server = httptest.NewServer(Handlers()) //Creating new server with the user handlers
 
-	//usersUrl = fmt.Sprintf("%s/users", server.URL) //Grab the address for the API endpoint
 }
+
 func TestGorilla(t *testing.T) {
-	req, err := http.NewRequest("GET", "/test/test", nil)
+
+	req, err := http.NewRequest("GET", "/test", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -33,7 +30,7 @@ func TestGorilla(t *testing.T) {
 		fmt.Println("asdf")
 	}
 	fmt.Println("rr code ", rr.Code)
-	fmt.Println(rr.Result())
-	fmt.Println(rr.Body.Bytes())
+	//fmt.Println(rr.Result())
+	fmt.Println(string(rr.Body.Bytes()))
 
 }
