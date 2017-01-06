@@ -7,7 +7,7 @@ import (
 )
 
 func FetchResource(resourceid string) Resource {
-	c := session.DB("resources").C("res")
+	c := session.DB(MongoDBDatabase).C("res")
 	result := Resource{}
 	err = c.Find(bson.M{"_id": bson.ObjectIdHex(resourceid)}).One(&result)
 

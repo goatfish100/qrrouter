@@ -10,6 +10,7 @@ import (
 
 var store = sessions.NewCookieStore([]byte("something-very-secret"))
 var session, err = mgo.Dial("localhost")
+var MongoDBDatabase = "resources"
 
 // if err != nil {
 // 	panic(err)
