@@ -20,18 +20,11 @@ func NewRouter() *mux.Router {
 
 	r.HandleFunc("/forward/{key}", ForwardHandler)
 	r.HandleFunc("/test", TestHandler)
-	//http.Handle("/", r)
-	//r.NotFoundHandler = http.HandlerFunc(HomeHandler)
-	//r.PathPrefix("/").Handler(http.FileServer(http.Dir("./static/")))
-	//r.PathPrefix("/jlsone/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("/home/jamesl/gowork/src/bitbucket.org/gorillaweb/static"))))
+	http.Handle("/", r)
+	r.NotFoundHandler = http.HandlerFunc(HomeHandler)
+	r.PathPrefix("/").Handler(http.FileServer(http.Dir("./static/")))
+	r.PathPrefix("/jlsone/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("/home/jamesl/gowork/src/bitbucket.org/gorillaweb/static"))))
 	r.PathPrefix("/jlsone").Handler(http.FileServer(http.Dir(http.Dir("/home/jamesl/gowork/src/bitbucket.org/gorillaweb/static"))))
-	// srv := &http.Server{
-	// 	Handler: r,
-	// 	Addr:    "localhost:8000",
-	// 	// Good practice: enforce timeouts for servers you create!
-	// 	WriteTimeout: 15 * time.Second,
-	// 	ReadTimeout:  15 * time.Second,
-	// }
 
 	return r
 }

@@ -9,7 +9,7 @@ import (
 func FetchResource(resourceid string) Resource {
 	c := session.DB(MongoDBDatabase).C("res")
 	result := Resource{}
-	err = c.Find(bson.M{"_id": bson.ObjectIdHex(resourceid)}).One(&result)
+	err = c.Find(bson.M{"uuid": resourceid}).One(&result)
 
 	if err != nil {
 		log.Fatal(err)
