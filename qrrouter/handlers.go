@@ -22,7 +22,7 @@ func NewRouter() *mux.Router {
 	r.HandleFunc("/test", TestHandler)
 	http.Handle("/", r)
 	r.NotFoundHandler = http.HandlerFunc(HomeHandler)
-	r.PathPrefix("/").Handler(http.FileServer(http.Dir("./static/")))
+
 	r.PathPrefix("/jlsone/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("/home/jamesl/gowork/src/bitbucket.org/gorillaweb/static"))))
 	r.PathPrefix("/jlsone").Handler(http.FileServer(http.Dir(http.Dir("/home/jamesl/gowork/src/bitbucket.org/gorillaweb/static"))))
 
@@ -93,7 +93,7 @@ func UUIDHandler(w http.ResponseWriter, r *http.Request) {
 	r.RequestURI = ""
 
 	if result.Action == "forward" {
-		http.Redirect(w, r, "https://www.youtube.com/", http.StatusFound)
+		http.Redirect(w, r, result.Address, http.StatusFound)
 
 	}
 
