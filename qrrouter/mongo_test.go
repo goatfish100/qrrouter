@@ -1,21 +1,23 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"testing"
 
+	"io/ioutil"
+
+	"gopkg.in/mgo.v2/bson"
 	"gopkg.in/mgo.v2/dbtest"
 )
-
-import "io/ioutil"
 
 var ()
 
 // var resource1 = Resource{
 // 	"Id": "584f89b595f3b0c9cab0d38a", "Description": "test", "Protected": "false", "Action": "forward", "Address": "www.yahoo.com"}
-var resource1 = Resource{Uuid: "034c1dd2-d454-11e6-a110-b34e9f2c654a", Description: "yahoo", Protected: "false", Action: "forward", Address: "http://www.yahoo.com"}
-var resource2 = Resource{Uuid: "059edd7c-d454-11e6-92b9-374c2fc3d623", Description: "yahoo", Protected: "false", Action: "forward", Address: "http://www.yahoo.com"}
+var resource1 = Resource{Uuid: "034c1dd2-d454-11e6-a110-b34e9f2c654a", Description: "yahoo", Protected: "false", Action: "forward", Address: "https://www.yahoo.com"}
+var resource2 = Resource{Uuid: "059edd7c-d454-11e6-92b9-374c2fc3d623", Description: "yahoo", Protected: "false", Action: "forward", Address: "https://www.google.com"}
 
 //{"_id" : ObjectId("584f89b595f3b0c9cab0d38a"), "description" : "test", "protected" : "false", "action" : "redirect", "address" : "https://www.yahoo.com" }
 // Server holds the dbtest DBServer
@@ -55,4 +57,42 @@ func TestMain(m *testing.M) {
 
 	// call with result of m.Run()
 	os.Exit(retCode)
+}
+
+func TestGetResource(t *testing.T) {
+	//session = Server.session()
+	c := session.DB(MongoDBDatabase).C("res")
+	result := Resource{}
+	err = c.Find(bson.M{"uuid": "059edd7c-d454-11e6-92b9-374c2fc3d623"}).One(&result)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	if testResource(result, resource2) == false {
+		log.Fatal("v")
+	}
+
+	result2 := Resource{}
+	err = c.Find(bson.M{"uuid": "does-not-exist"}).One(&result2)
+	if testResource(result2, resource2) == true {
+		fmt.Println(result)
+		log.Fatal("v")
+	}
+	//return result
+}
+
+func testResource(r1 Resource, r2 Resource) bool {
+	var resflag bool
+	if r1.Action == r2.Action &&
+		r1.Address == r2.Address &&
+		r1.Description == r2.Description &&
+		r1.Protected == r2.Protected &&
+		r1.Uuid == r2.Uuid {
+		resflag = true
+	} else {
+		resflag = false
+	}
+
+	return resflag
+
 }
