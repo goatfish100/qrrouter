@@ -18,7 +18,6 @@ func NewRouter() *mux.Router {
 	r.HandleFunc("/uuid/{key}", UUIDHandler)
 	r.HandleFunc("/getResource/{key}", GetResourceHandler)
 
-	r.HandleFunc("/forward/{key}", ForwardHandler)
 	r.HandleFunc("/test", TestHandler)
 	http.Handle("/", r)
 	r.NotFoundHandler = http.HandlerFunc(HomeHandler)
@@ -109,13 +108,4 @@ func UUIDHandler(w http.ResponseWriter, r *http.Request) {
 
 	fwd, _ := forward.New()
 	fwd.ServeHTTP(w, r)
-}
-
-// This handler is to handle _ send resource on thier way
-func ForwardHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("inside forward handler")
-	r.URL = testutils.ParseURI("https://www.google.com")
-	r.RequestURI = ""
-	http.Redirect(w, r, "https://www.google.com", http.StatusFound)
-
 }
