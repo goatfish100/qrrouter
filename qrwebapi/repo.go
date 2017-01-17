@@ -1,9 +1,12 @@
 package main
 
+import "gopkg.in/mgo.v2/bson"
+
 var currentId int
 
 var qrresource QRResource
 var orgs Orgs
+var users Users
 
 //var jsonsucess JsonSucess
 
@@ -57,6 +60,12 @@ func init() {
 		},
 	})
 
+	UserCreate(User{Username: "bjorn balls",
+		Email:    "test@yahoo.com",
+		Name:     "bjorn balls",
+		Password: "secret",
+	})
+
 }
 
 func RepoFindResource(id int) Resource {
@@ -72,6 +81,8 @@ func RepoFindResource(id int) Resource {
 func OrgCreate(o Org) Org {
 	// Insert Datas
 	c := session.DB("resources").C("orgusers")
+	i := bson.NewObjectId()
+	o.Id = i
 	err = c.Insert(o)
 
 	if err != nil {
@@ -79,6 +90,18 @@ func OrgCreate(o Org) Org {
 	}
 	orgs = append(orgs, o)
 	return o
+}
+
+func UserCreate(user User) User {
+	// Insert Datas
+	c := session.DB("resources").C("orgusers")
+	err = c.Insert(user)
+
+	if err != nil {
+		panic(err)
+	}
+	users = append(users, user)
+	return user
 }
 
 //this is bad, I don't think it passes race condtions

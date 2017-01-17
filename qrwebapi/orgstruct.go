@@ -5,11 +5,11 @@ import "gopkg.in/mgo.v2/bson"
 type Org struct {
 	//Id         string `json:"id" bson:"_id,omitempty"`
 	Id         bson.ObjectId `json:"id"        bson:"_id,omitempty"`
-	Orgname    string
-	Address    string `json:"address"`
-	City       string `json:"city"`
-	State      string `json:"state"`
-	Postalcode string `json:"postalcode"`
+	Orgname    string        `json:"orgname"`
+	Address    string        `json:"address"`
+	City       string        `json:"city"`
+	State      string        `json:"state"`
+	Postalcode string        `json:"postalcode"`
 	Users      Users
 }
 

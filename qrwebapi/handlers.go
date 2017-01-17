@@ -120,7 +120,32 @@ func PostCreateOrg(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("org is ", organization.Id)
 
 }
+func PostCreateUser(w http.ResponseWriter, r *http.Request) {
+	var user User
+	body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576))
+	if err != nil {
+		panic(err)
+	}
+	if err := r.Body.Close(); err != nil {
+		panic(err)
+	}
+	if err := json.Unmarshal(body, &user); err != nil {
+		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+		w.WriteHeader(422) // unprocessable entity
+		if err := json.NewEncoder(w).Encode(err); err != nil {
+			panic(err)
+		}
+	}
+	//OrgCreate(organization)
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	jsonsuccess := JsonSuccess{Success: "true"}
 
+	if err := json.NewEncoder(w).Encode(jsonsuccess); err != nil {
+		panic(err)
+	}
+	//fmt.Println("org is ", organization.Id)
+
+}
 func ResourceCreate(w http.ResponseWriter, r *http.Request) {
 	var resource Resource
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576))
