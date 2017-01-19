@@ -7,7 +7,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"strconv"
 
 	"github.com/gorilla/mux"
 
@@ -27,15 +26,13 @@ func Index(w http.ResponseWriter, r *http.Request) {
 func GetResource(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
-	var resourceId int
-	var err error
-	if resourceId, err = strconv.Atoi(vars["resourceId"]); err != nil {
-		panic(err)
-	}
+	var resourceId = vars["resourceId"]
+
 	fmt.Println("resource id ", resourceId)
 	res := RepoFindResource(resourceId)
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
+	fmt.Println(res)
 	if res.Id > 0 {
 		if err := json.NewEncoder(w).Encode(res); err != nil {
 			panic(err)
