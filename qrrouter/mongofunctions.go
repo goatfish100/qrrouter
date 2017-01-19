@@ -12,7 +12,8 @@ func FetchResource(resourceid string) Resource {
 	err = c.Find(bson.M{"uuid": resourceid}).One(&result)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Print(err)
 	}
+	log.Println("leaving FetchResource")
 	return result
 }

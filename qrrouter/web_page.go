@@ -12,10 +12,6 @@ var store = sessions.NewCookieStore([]byte("something-very-secret"))
 var session, err = mgo.Dial("localhost")
 var MongoDBDatabase = "resources"
 
-type QRResource struct {
-	Data Resource `json:"data"`
-}
-
 func main() {
 
 	router := NewRouter()

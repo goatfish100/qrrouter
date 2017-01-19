@@ -10,6 +10,8 @@ import (
 
 	"gopkg.in/mgo.v2/bson"
 	"gopkg.in/mgo.v2/dbtest"
+
+	"bitbucket.org/gorouter/datastructs"
 )
 
 var ()
