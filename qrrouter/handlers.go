@@ -10,6 +10,7 @@ import (
 	"github.com/vulcand/oxy/testutils"
 )
 
+//NewRouter - new Gorilla Router
 func NewRouter() *mux.Router {
 
 	r := mux.NewRouter()
@@ -28,10 +29,13 @@ func NewRouter() *mux.Router {
 	return r
 }
 
+//TestHandler - a test handler - hello Gorilla
 func TestHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("inside test handler")
 	w.Write([]byte("Gorilla!\n"))
 }
+
+//HomeHandler proxy request home handler
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	// for relative urls - we need to get the resource
 	// so we can proxy/server it -- aka
@@ -60,6 +64,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
+//GetResourceHandler - resouce hander
 func GetResourceHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	fmt.Println(vars["key"])
@@ -79,7 +84,7 @@ func describe(i interface{}) {
 	fmt.Printf("(%v, %T)\n", i, i)
 }
 
-// This handler is to handle _ send resource on thier way
+//UUIDHandler This handler is to handle _ send resource on thier way
 func UUIDHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("inside UUIDHandler")
 
@@ -87,13 +92,12 @@ func UUIDHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(vars["key"])
 	result := FetchResource(vars["key"])
 	fmt.Println("the address is " + result.Address)
-	var saddress string = result.Address
+	var saddress = result.Address
 	r.URL = testutils.ParseURI(result.Address)
 	r.RequestURI = ""
 
 	if result.Action == "forward" {
 		http.Redirect(w, r, result.Address, http.StatusFound)
-
 	}
 
 	session, err := store.Get(r, "gorillasession")

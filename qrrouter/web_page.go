@@ -10,6 +10,8 @@ import (
 
 var store = sessions.NewCookieStore([]byte("something-very-secret"))
 var session, err = mgo.Dial("localhost")
+
+//MongoDBDatabase - mongo database name
 var MongoDBDatabase = "resources"
 
 func main() {

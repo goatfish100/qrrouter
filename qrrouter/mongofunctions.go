@@ -4,10 +4,9 @@ import (
 	"log"
 
 	"gopkg.in/mgo.v2/bson"
-
-	"../datastructures"
 )
 
+//FetchResource - fetch resource
 func FetchResource(resourceid string) datastructures.Resource {
 	c := session.DB(MongoDBDatabase).C("res")
 	result := datastructures.Resource{}
