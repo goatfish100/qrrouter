@@ -14,6 +14,9 @@ import (
 
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
+
+	"bitbucket.org/gorouter/datastructs"
+
 )
 
 var store = sessions.NewCookieStore([]byte("something-very-secret"))
@@ -33,7 +36,7 @@ func GetResource(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 	fmt.Println(res)
-	if res.Id > 0 {
+	if res.Id == "" {
 		if err := json.NewEncoder(w).Encode(res); err != nil {
 			panic(err)
 		}
@@ -53,7 +56,7 @@ func GetOrg(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	log.Printf("%s\t%s\t%s\t%s")
 	c := session.DB("resources").C("orgusers")
-	org := Org{}
+	org := datastructs.Org{}
 	// number, _ := strconv.Atoi(resourceid)
 
 	//organization := OrgFind(orgId)
@@ -92,7 +95,7 @@ func GetOrgs(w http.ResponseWriter, r *http.Request) {
 }
 
 func PostCreateOrg(w http.ResponseWriter, r *http.Request) {
-	var organization Org
+	var organization datastructs.Org
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576))
 	if err != nil {
 		panic(err)
@@ -118,7 +121,7 @@ func PostCreateOrg(w http.ResponseWriter, r *http.Request) {
 
 }
 func PostCreateUser(w http.ResponseWriter, r *http.Request) {
-	var user User
+	var user datastructs.User
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576))
 	if err != nil {
 		panic(err)
@@ -144,7 +147,7 @@ func PostCreateUser(w http.ResponseWriter, r *http.Request) {
 
 }
 func ResourceCreate(w http.ResponseWriter, r *http.Request) {
-	var resource Resource
+	var resource datastructs.Resource
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576))
 	if err != nil {
 		panic(err)

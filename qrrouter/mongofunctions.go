@@ -4,11 +4,13 @@ import (
 	"log"
 
 	"gopkg.in/mgo.v2/bson"
+
+	"../datastructures"
 )
 
-func FetchResource(resourceid string) Resource {
+func FetchResource(resourceid string) datastructures.Resource {
 	c := session.DB(MongoDBDatabase).C("res")
-	result := Resource{}
+	result := datastructures.Resource{}
 	err = c.Find(bson.M{"uuid": resourceid}).One(&result)
 
 	if err != nil {

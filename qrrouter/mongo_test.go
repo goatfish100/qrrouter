@@ -6,20 +6,20 @@ import (
 	"os"
 	"testing"
 
+	"bitbucket.org/gorouter/datastructs"
+
 	"io/ioutil"
 
 	"gopkg.in/mgo.v2/bson"
 	"gopkg.in/mgo.v2/dbtest"
-
-	"bitbucket.org/gorouter/datastructs"
 )
 
 var ()
 
 // var resource1 = Resource{
 // 	"Id": "584f89b595f3b0c9cab0d38a", "Description": "test", "Protected": "false", "Action": "forward", "Address": "www.yahoo.com"}
-var resource1 = Resource{Uuid: "034c1dd2-d454-11e6-a110-b34e9f2c654a", Description: "yahoo", Protected: "false", Action: "forward", Address: "https://www.yahoo.com"}
-var resource2 = Resource{Uuid: "059edd7c-d454-11e6-92b9-374c2fc3d623", Description: "yahoo", Protected: "false", Action: "forward", Address: "https://www.google.com"}
+var resource1 = datastructs.Resource{Uuid: "034c1dd2-d454-11e6-a110-b34e9f2c654a", Description: "yahoo", Protected: "false", Action: "forward", Address: "https://www.yahoo.com"}
+var resource2 = datastructs.Resource{Uuid: "059edd7c-d454-11e6-92b9-374c2fc3d623", Description: "yahoo", Protected: "false", Action: "forward", Address: "https://www.google.com"}
 
 //{"_id" : ObjectId("584f89b595f3b0c9cab0d38a"), "description" : "test", "protected" : "false", "action" : "redirect", "address" : "https://www.yahoo.com" }
 // Server holds the dbtest DBServer

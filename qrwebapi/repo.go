@@ -4,25 +4,26 @@ import (
 	"fmt"
 	"log"
 
+	"bitbucket.org/gorouter/datastructs"
 	"gopkg.in/mgo.v2/bson"
 )
 
-var qrresource QRResource
-var orgs Orgs
-var users Users
+//var qrresource QRResource
+var orgs datastructs.Orgs
+var users datastructs.Users
 
 //var jsonsucess JsonSucess
 
 // Give us some seed data
 func init() {
 
-	OrgCreate(Org{
+	OrgCreate(datastructs.Org{
 		Orgname:    "Rest Holdings",
 		Address:    "123 H street",
 		City:       "Culver",
 		State:      "CA",
 		Postalcode: "84109",
-		Users: []User{{
+		Users: []datastructs.User{{
 			Username: "freegyg",
 			Email:    "freddy@yahoo.com",
 			Name:     "Freddy G Spot",
@@ -33,15 +34,14 @@ func init() {
 			Name:     "asdf",
 			Password: "asdf",
 		},
-		},
-	})
-	OrgCreate(Org{
+		}})
+	OrgCreate(datastructs.Org{
 		Orgname:    "awake Holdings",
 		Address:    "123 H street",
 		City:       "Culver",
 		State:      "CA",
 		Postalcode: "84109",
-		Users: []User{{
+		Users: []datastructs.User{{
 			Username: "freegyg",
 			Email:    "freddy@yahoo.com",
 			Name:     "Freddy G Spot",
@@ -55,17 +55,11 @@ func init() {
 		},
 	})
 
-	UserCreate(User{Username: "bjorn balls",
-		Email:    "test@yahoo.com",
-		Name:     "bjorn balls",
-		Password: "secret",
-	})
-
 }
 
-func RepoFindResource(id string) Resource {
+func RepoFindResource(id string) datastructs.Resource {
 	c := session.DB("resources").C("orgusers")
-	result := Resource{}
+	result := datastructs.Resource{}
 	err = c.Find(bson.M{"_id": bson.ObjectIdHex(id)}).One(&result)
 
 	if err != nil {
@@ -74,7 +68,7 @@ func RepoFindResource(id string) Resource {
 	return result
 }
 
-func OrgCreate(o Org) Org {
+func OrgCreate(o datastructs.Org) datastructs.Org {
 	// Insert Datas
 	c := session.DB("resources").C("orgusers")
 	i := bson.NewObjectId()
@@ -89,7 +83,7 @@ func OrgCreate(o Org) Org {
 	return o
 }
 
-func UserCreate(user User) User {
+func UserCreate(user datastructs.User) datastructs.User {
 	// Insert Datas
 	c := session.DB("resources").C("orgusers")
 	err = c.Insert(user)
