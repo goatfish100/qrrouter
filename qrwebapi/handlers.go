@@ -21,18 +21,18 @@ import (
 
 var store = sessions.NewCookieStore([]byte("something-very-secret"))
 var session, err = mgo.Dial("localhost")
-
+//Index - sample index/test page
 func Index(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "Welcome!\n")
 }
-
+//GetResource - return information about a resource
 func GetResource(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
-	var resourceId = vars["resourceId"]
+	var resourceID = vars["resourceId"]
 
-	fmt.Println("resource id ", resourceId)
-	res := RepoFindResource(resourceId)
+	fmt.Println("resource id ", resourceID)
+	res := RepoFindResource(resourceID)
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 	fmt.Println(res)
@@ -51,7 +51,7 @@ func GetResource(w http.ResponseWriter, r *http.Request) {
 
 }
 
-// return all orgs
+//GetOrg return all orgs
 func GetOrg(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	log.Printf("%s\t%s\t%s\t%s")
@@ -82,7 +82,7 @@ func GetOrg(w http.ResponseWriter, r *http.Request) {
 
 }
 
-// refactor into one func ...
+//GetOrgs - get organizations refactor into one func ...
 func GetOrgs(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
@@ -93,7 +93,7 @@ func GetOrgs(w http.ResponseWriter, r *http.Request) {
 	}
 	return
 }
-
+//PostCreateOrg - a post operation to create organization
 func PostCreateOrg(w http.ResponseWriter, r *http.Request) {
 	var organization datastructs.Org
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576))
@@ -112,7 +112,7 @@ func PostCreateOrg(w http.ResponseWriter, r *http.Request) {
 	}
 	OrgCreate(organization)
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	jsonsuccess := JsonSuccess{Success: "true"}
+	jsonsuccess := JSONSuccess{Success: "true"}
 
 	if err := json.NewEncoder(w).Encode(jsonsuccess); err != nil {
 		panic(err)
@@ -120,6 +120,7 @@ func PostCreateOrg(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("org is ", organization.Id)
 
 }
+//PostCreateUser - A Post Operation to create a user
 func PostCreateUser(w http.ResponseWriter, r *http.Request) {
 	var user datastructs.User
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576))
@@ -146,6 +147,8 @@ func PostCreateUser(w http.ResponseWriter, r *http.Request) {
 	//fmt.Println("org is ", organization.Id)
 
 }
+
+//ResourceCreate - create a resource
 func ResourceCreate(w http.ResponseWriter, r *http.Request) {
 	var resource datastructs.Resource
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576))

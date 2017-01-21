@@ -57,6 +57,7 @@ func init() {
 
 }
 
+//RepoFindResource - find resources by id
 func RepoFindResource(id string) datastructs.Resource {
 	c := session.DB("resources").C("orgusers")
 	result := datastructs.Resource{}
@@ -68,6 +69,7 @@ func RepoFindResource(id string) datastructs.Resource {
 	return result
 }
 
+//OrgCreate create a new organization
 func OrgCreate(o datastructs.Org) datastructs.Org {
 	// Insert Datas
 	c := session.DB("resources").C("orgusers")
@@ -83,6 +85,7 @@ func OrgCreate(o datastructs.Org) datastructs.Org {
 	return o
 }
 
+//UserCreate ... create a new user
 func UserCreate(user datastructs.User) datastructs.User {
 	// Insert Datas
 	c := session.DB("resources").C("orgusers")

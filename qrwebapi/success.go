@@ -1,5 +1,6 @@
 package main
 
-type JsonSuccess struct {
+//JSONSuccess - struct for success result
+type JSONSuccess struct {
 	Success string `json:"success"`
 }
