@@ -4,12 +4,14 @@ import (
 	"log"
 
 	"gopkg.in/mgo.v2/bson"
+
+	"bitbucket.org/gorouter/datastructs"
 )
 
 //FetchResource - fetch resource
-func FetchResource(resourceid string) datastructures.Resource {
+func FetchResource(resourceid string) datastructs.Resource {
 	c := session.DB(MongoDBDatabase).C("res")
-	result := datastructures.Resource{}
+	result := datastructs.Resource{}
 	err = c.Find(bson.M{"uuid": resourceid}).One(&result)
 
 	if err != nil {

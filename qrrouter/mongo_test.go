@@ -64,7 +64,7 @@ func TestMain(m *testing.M) {
 func TestGetResource(t *testing.T) {
 	//session = Server.session()
 	c := session.DB(MongoDBDatabase).C("res")
-	result := Resource{}
+	result := datastructs.Resource{}
 	err = c.Find(bson.M{"uuid": "059edd7c-d454-11e6-92b9-374c2fc3d623"}).One(&result)
 
 	if err != nil {
@@ -74,7 +74,7 @@ func TestGetResource(t *testing.T) {
 		log.Fatal("v")
 	}
 
-	result2 := Resource{}
+	result2 := datastructs.Resource{}
 	err = c.Find(bson.M{"uuid": "does-not-exist"}).One(&result2)
 	if testResource(result2, resource2) == true {
 		fmt.Println(result)
@@ -83,7 +83,7 @@ func TestGetResource(t *testing.T) {
 	//return result
 }
 
-func testResource(r1 Resource, r2 Resource) bool {
+func testResource(r1 datastructs.Resource, r2 datastructs.Resource) bool {
 	var resflag bool
 	if r1.Action == r2.Action &&
 		r1.Address == r2.Address &&
