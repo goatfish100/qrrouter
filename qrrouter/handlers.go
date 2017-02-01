@@ -23,8 +23,8 @@ func NewRouter() *mux.Router {
 	http.Handle("/", r)
 	r.NotFoundHandler = http.HandlerFunc(HomeHandler)
 
-	r.PathPrefix("/jlsone/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("/home/jamesl/gowork/src/bitbucket.org/gorillaweb/static"))))
-	r.PathPrefix("/jlsone").Handler(http.FileServer(http.Dir(http.Dir("/home/jamesl/gowork/src/bitbucket.org/gorillaweb/static"))))
+	//r.PathPrefix("/jlsone/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("/home/jamesl/gowork/src/bitbucket.org/gorillaweb/static"))))
+	r.PathPrefix("/jlsone/").Handler(http.FileServer(http.Dir(http.Dir("/home/jamesl/gowork/src/bitbucket.org/gorillaweb/static"))))
 
 	return r
 }
@@ -91,25 +91,31 @@ func UUIDHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	fmt.Println(vars["key"])
 	result := FetchResource(vars["key"])
-	fmt.Println("the address is " + result.Address)
-	var saddress = result.Address
-	r.URL = testutils.ParseURI(result.Address)
-	r.RequestURI = ""
+	if result.Address != "" {
 
-	if result.Action == "forward" {
-		http.Redirect(w, r, result.Address, http.StatusFound)
+		fmt.Println("the address is " + result.Address)
+		var saddress = result.Address
+		r.URL = testutils.ParseURI(result.Address)
+		r.RequestURI = ""
+
+		if result.Action == "forward" {
+			http.Redirect(w, r, result.Address, http.StatusFound)
+		}
+
+		session, err := store.Get(r, "gorillasession")
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		// Set some session values.
+		session.Values["redirection_url"] = saddress
+		session.Save(r, w)
+
+		fwd, _ := forward.New()
+		fwd.ServeHTTP(w, r)
+	} else {
+		//TODO - Forward/send to real not found resource
+		w.Write([]byte("No QR Helper found!\n"))
 	}
-
-	session, err := store.Get(r, "gorillasession")
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	// Set some session values.
-	session.Values["redirection_url"] = saddress
-	session.Save(r, w)
-
-	fwd, _ := forward.New()
-	fwd.ServeHTTP(w, r)
 }
