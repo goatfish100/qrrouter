@@ -16,15 +16,16 @@ import (
 	"gopkg.in/mgo.v2/bson"
 
 	"bitbucket.org/gorouter/datastructs"
-
 )
 
 var store = sessions.NewCookieStore([]byte("something-very-secret"))
 var session, err = mgo.Dial("localhost")
+
 //Index - sample index/test page
 func Index(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "Welcome!\n")
 }
+
 //GetResource - return information about a resource
 func GetResource(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
@@ -54,7 +55,7 @@ func GetResource(w http.ResponseWriter, r *http.Request) {
 //GetOrg return all orgs
 func GetOrg(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	log.Printf("%s\t%s\t%s\t%s")
+	//log.Printf("%s\t%s\t%s\t%s")
 	c := session.DB("resources").C("orgusers")
 	org := datastructs.Org{}
 	// number, _ := strconv.Atoi(resourceid)
@@ -93,6 +94,7 @@ func GetOrgs(w http.ResponseWriter, r *http.Request) {
 	}
 	return
 }
+
 //PostCreateOrg - a post operation to create organization
 func PostCreateOrg(w http.ResponseWriter, r *http.Request) {
 	var organization datastructs.Org
@@ -112,7 +114,7 @@ func PostCreateOrg(w http.ResponseWriter, r *http.Request) {
 	}
 	OrgCreate(organization)
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	jsonsuccess := JSONSuccess{Success: "true"}
+	var jsonsuccess = JSONSuccess{Success: "true"}
 
 	if err := json.NewEncoder(w).Encode(jsonsuccess); err != nil {
 		panic(err)
@@ -120,6 +122,7 @@ func PostCreateOrg(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("org is ", organization.Id)
 
 }
+
 //PostCreateUser - A Post Operation to create a user
 func PostCreateUser(w http.ResponseWriter, r *http.Request) {
 	var user datastructs.User
@@ -139,7 +142,7 @@ func PostCreateUser(w http.ResponseWriter, r *http.Request) {
 	}
 	//OrgCreate(organization)
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	jsonsuccess := JsonSuccess{Success: "true"}
+	var jsonsuccess = JSONSuccess{Success: "true"}
 
 	if err := json.NewEncoder(w).Encode(jsonsuccess); err != nil {
 		panic(err)
