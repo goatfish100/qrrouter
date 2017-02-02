@@ -28,11 +28,11 @@ var Server dbtest.DBServer
 func insertFixtures() {
 
 	if err := session.DB(MongoDBDatabase).C("res").Insert(resource1); err != nil {
-		t.Log(err)
+
 	}
 
 	if err := session.DB(MongoDBDatabase).C("res").Insert(resource2); err != nil {
-		t.Log(err)
+
 	}
 }
 func init() {
@@ -52,9 +52,7 @@ func TestMain(m *testing.M) {
 	// Make sure we DropDatabase so we make absolutely sure nothing is left or locked while wiping the data and
 	// close session
 
-	t.Log("droppping database")
 	session.DB(MongoDBDatabase).DropDatabase()
-	t.Log("closing session")
 	session.Close()
 
 	Server.Stop()
@@ -77,11 +75,13 @@ func TestGetResource(t *testing.T) {
 		t.Log("v")
 	}
 
+	// Try to find a resource that DOES NOT exist ... and ensure it isn't found
 	result2 := datastructs.Resource{}
 	err = c.Find(bson.M{"uuid": "does-not-exist"}).One(&result2)
-	if testResource(result2, resource2) == true {
+	if result2.Address == "" {
 		t.Log(result)
-		t.Fatal("v")
+	} else {
+		t.Fatal("mongo resource not equal")
 	}
 	//return result
 }
