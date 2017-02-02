@@ -1,14 +1,12 @@
 package main
 
 import (
-	"fmt"
-	"log"
 	"os"
 	"testing"
 
-	"bitbucket.org/gorouter/datastructs"
-
 	"io/ioutil"
+
+	"bitbucket.org/gorouter/datastructs"
 
 	"gopkg.in/mgo.v2/bson"
 	"gopkg.in/mgo.v2/dbtest"
@@ -25,14 +23,16 @@ var resource2 = datastructs.Resource{Uuid: "059edd7c-d454-11e6-92b9-374c2fc3d623
 // Server holds the dbtest DBServer
 var Server dbtest.DBServer
 
+//var server dbtest.DBServer.Session()
+
 func insertFixtures() {
 
 	if err := session.DB(MongoDBDatabase).C("res").Insert(resource1); err != nil {
-		log.Println(err)
+		t.Log(err)
 	}
 
 	if err := session.DB(MongoDBDatabase).C("res").Insert(resource2); err != nil {
-		log.Println(err)
+		t.Log(err)
 	}
 }
 func init() {
@@ -52,7 +52,9 @@ func TestMain(m *testing.M) {
 	// Make sure we DropDatabase so we make absolutely sure nothing is left or locked while wiping the data and
 	// close session
 
+	t.Log("droppping database")
 	session.DB(MongoDBDatabase).DropDatabase()
+	t.Log("closing session")
 	session.Close()
 
 	Server.Stop()
@@ -67,18 +69,19 @@ func TestGetResource(t *testing.T) {
 	result := datastructs.Resource{}
 	err = c.Find(bson.M{"uuid": "059edd7c-d454-11e6-92b9-374c2fc3d623"}).One(&result)
 
+	t.Log("test address ", result.Address)
 	if err != nil {
-		log.Fatal(err)
+		t.Log(err)
 	}
 	if testResource(result, resource2) == false {
-		log.Fatal("v")
+		t.Log("v")
 	}
 
 	result2 := datastructs.Resource{}
 	err = c.Find(bson.M{"uuid": "does-not-exist"}).One(&result2)
 	if testResource(result2, resource2) == true {
-		fmt.Println(result)
-		log.Fatal("v")
+		t.Log(result)
+		t.Fatal("v")
 	}
 	//return result
 }

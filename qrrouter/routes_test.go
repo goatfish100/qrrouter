@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -27,11 +26,11 @@ func TestGorilla(t *testing.T) {
 	handler.ServeHTTP(rr, req)
 	//
 	if rr.Code == 404 {
-		fmt.Println("asdf")
+		t.Log("404 code found")
 	}
-	fmt.Println("rr code ", rr.Code)
+	t.Log("rr code ", rr.Code)
 	//fmt.Println(rr.Result())
-	fmt.Println(string(rr.Body.Bytes()))
+	t.Log(string(rr.Body.Bytes()))
 
 }
 
@@ -47,10 +46,12 @@ func TestUUIDRoute(t *testing.T) {
 	handler.ServeHTTP(rr, req)
 	//
 	if rr.Code == 404 {
-		fmt.Println("asdf")
+		t.Log("asdf")
+		//Log("asdf")
 	}
-	fmt.Println("testUUIDRoute code ", rr.Code)
+	t.Log("testUUIDRoute code ", rr.Code)
+	t.Log("testUUIDRoute code ", rr.Code)
 	//fmt.Println(rr.Result())
-	fmt.Println(string(rr.Body.Bytes()))
+	t.Log(string(rr.Body.Bytes()))
 
 }
