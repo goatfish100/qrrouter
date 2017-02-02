@@ -37,7 +37,7 @@ func GetResource(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 	fmt.Println(res)
-	if res.Id == "" {
+	if res.ID == "" {
 		if err := json.NewEncoder(w).Encode(res); err != nil {
 			panic(err)
 		}
@@ -72,7 +72,7 @@ func GetOrg(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	fmt.Println("inside GetOrg ", org)
 	// check if empty array ...
-	if org.Id == "" {
+	if org.ID == "" {
 		error := jsonErr{Code: 404, Text: "Not Found"}
 		if err := json.NewEncoder(w).Encode(error); err != nil {
 			panic(err)
@@ -114,12 +114,12 @@ func PostCreateOrg(w http.ResponseWriter, r *http.Request) {
 	}
 	OrgCreate(organization)
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	var jsonsuccess = JSONSuccess{Success: "true"}
+	var jsonsuccess = datastructs.JSONSuccess{Success: "true"}
 
 	if err := json.NewEncoder(w).Encode(jsonsuccess); err != nil {
 		panic(err)
 	}
-	fmt.Println("org is ", organization.Id)
+	fmt.Println("org is ", organization.ID)
 
 }
 
@@ -142,7 +142,7 @@ func PostCreateUser(w http.ResponseWriter, r *http.Request) {
 	}
 	//OrgCreate(organization)
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	var jsonsuccess = JSONSuccess{Success: "true"}
+	var jsonsuccess = datastructs.JSONSuccess{Success: "true"}
 
 	if err := json.NewEncoder(w).Encode(jsonsuccess); err != nil {
 		panic(err)

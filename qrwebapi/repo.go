@@ -75,7 +75,7 @@ func OrgCreate(o datastructs.Org) datastructs.Org {
 	c := session.DB("resources").C("orgusers")
 	i := bson.NewObjectId()
 	fmt.Println("The id is ", i)
-	o.Id = i
+	o.ID = i
 	err = c.Insert(o)
 
 	if err != nil {

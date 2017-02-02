@@ -5,7 +5,7 @@
 	"Deps": [
 		{
 			"ImportPath": "bitbucket.org/gorouter/datastructs",
-			"Rev": "9eafabb8f8ae890458714f6ba7a9513926ee0d62"
+			"Rev": "3bd4458b846c61e569b570bbeb9ebafd45cce2a5"
 		},
 		{
 			"ImportPath": "github.com/gorilla/context",
@@ -51,6 +51,14 @@
 			"ImportPath": "gopkg.in/mgo.v2/internal/scram",
 			"Comment": "r2016.08.01-5-g3f83fa5",
 			"Rev": "3f83fa5005286a7fe593b055f0d7771a7dce4655"
+		},
+		{
+			"ImportPath": "bitbucket.org/gorouter/datastructs/vendor/gopkg.in/mgo.v2/bson",
+			"Rev": "3bd4458b846c61e569b570bbeb9ebafd45cce2a5"
+		},
+		{
+			"ImportPath": "bitbucket.org/gorouter/datastructs/vendor/gopkg.in/mgo.v2/internal/json",
+			"Rev": "3bd4458b846c61e569b570bbeb9ebafd45cce2a5"
 		}
 	]
 }
