@@ -1,9 +1,14 @@
 package main
 
 import (
+	"fmt"
+	"log"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/gorilla/context"
+	"github.com/gorilla/mux"
 )
 
 var (
@@ -34,9 +39,37 @@ func TestGorilla(t *testing.T) {
 
 }
 
-func TestUUIDRoute(t *testing.T) {
+func TestUUIDRoute1(t *testing.T) {
+	r := mux.NewRouter()
+	r.HandleFunc("/uuid/{key}", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintln(w, "Hello, client")
+	}))
+
+	ts := httptest.NewServer(r)
+	//rr := httptest.NewRecorder()
+
+	defer ts.Close()
+
+	// Table driven test
+	var suid = "059edd7c-d454-11e6-92b9-374c2fc3d623"
+
+	url := ts.URL + "/uuid/" + suid
+
+	resp, err := http.Get(url)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	log.Println("status is ", resp.StatusCode)
+
+}
+func TestUUIDRoute2(t *testing.T) {
+	//r := mux.NewRouter()
 
 	req, err := http.NewRequest("GET", "/uuid/059edd7c-d454-11e6-92b9-374c2fc3d623", nil)
+
+	context.Set(req, "key", "059edd7c-d454-11e6-92b9-374c2fc3d623")
+
 	if err != nil {
 		t.Fatal(err)
 	}

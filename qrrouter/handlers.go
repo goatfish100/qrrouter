@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -86,14 +87,14 @@ func describe(i interface{}) {
 
 //UUIDHandler This handler is to handle _ send resource on thier way
 func UUIDHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("inside UUIDHandler")
+	log.Println("inside UUIDHandler")
 
 	vars := mux.Vars(r)
-	fmt.Println(vars["key"])
+	log.Println("uuid keys", vars["key"])
 	result := FetchResource(vars["key"])
 	if result.Address != "" {
 
-		fmt.Println("the address is " + result.Address)
+		log.Println("the address is " + result.Address)
 		var saddress = result.Address
 		r.URL = testutils.ParseURI(result.Address)
 		r.RequestURI = ""
@@ -116,6 +117,9 @@ func UUIDHandler(w http.ResponseWriter, r *http.Request) {
 		fwd.ServeHTTP(w, r)
 	} else {
 		//TODO - Forward/send to real not found resource
+		log.Println("UUIDHandler - no resource found for ", vars["key"])
+
+		//http.Error("No QR Helper found!\n", "QR resource not found", http.StatusNotFound)
 		w.Write([]byte("No QR Helper found!\n"))
 	}
 }

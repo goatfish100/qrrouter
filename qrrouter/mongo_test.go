@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"log"
 	"os"
 	"testing"
 
@@ -14,33 +16,25 @@ import (
 
 var ()
 
-// var resource1 = Resource{
-// 	"Id": "584f89b595f3b0c9cab0d38a", "Description": "test", "Protected": "false", "Action": "forward", "Address": "www.yahoo.com"}
 var resource1 = datastructs.Resource{Uuid: "034c1dd2-d454-11e6-a110-b34e9f2c654a", Description: "yahoo", Protected: "false", Action: "forward", Address: "https://www.yahoo.com"}
 var resource2 = datastructs.Resource{Uuid: "059edd7c-d454-11e6-92b9-374c2fc3d623", Description: "yahoo", Protected: "false", Action: "forward", Address: "https://www.google.com"}
 
-//{"_id" : ObjectId("584f89b595f3b0c9cab0d38a"), "description" : "test", "protected" : "false", "action" : "redirect", "address" : "https://www.yahoo.com" }
-// Server holds the dbtest DBServer
 var Server dbtest.DBServer
-
-//var server dbtest.DBServer.Session()
 
 func insertFixtures() {
 
 	if err := session.DB(MongoDBDatabase).C("res").Insert(resource1); err != nil {
-
+		log.Fatal("Unable to insert test record resource1")
 	}
 
 	if err := session.DB(MongoDBDatabase).C("res").Insert(resource2); err != nil {
-
+		log.Fatal("Unable to insert test record resource2")
 	}
-}
-func init() {
-
 }
 
 func TestMain(m *testing.M) {
 	//os.TempDir()
+	fmt.Println("TestMain - routine")
 	tempDir, _ := ioutil.TempDir("", "testing")
 	Server.SetPath(tempDir)
 
@@ -48,7 +42,10 @@ func TestMain(m *testing.M) {
 	session = Server.Session()
 	insertFixtures()
 	// Run the test suite
+
+	fmt.Println("m.Run - start")
 	retCode := m.Run()
+	fmt.Println("m.Run - End")
 	// Make sure we DropDatabase so we make absolutely sure nothing is left or locked while wiping the data and
 	// close session
 
@@ -57,12 +54,14 @@ func TestMain(m *testing.M) {
 
 	Server.Stop()
 
+	fmt.Println("exiting test main")
 	// call with result of m.Run()
 	os.Exit(retCode)
+
 }
 
 func TestGetResource(t *testing.T) {
-	//session = Server.session()
+	t.Log("TestGetResource Test")
 	c := session.DB(MongoDBDatabase).C("res")
 	result := datastructs.Resource{}
 	err = c.Find(bson.M{"uuid": "059edd7c-d454-11e6-92b9-374c2fc3d623"}).One(&result)
@@ -84,6 +83,14 @@ func TestGetResource(t *testing.T) {
 		t.Fatal("mongo resource not equal")
 	}
 	//return result
+}
+
+func TestFetchResource(t *testing.T) {
+	t.Log("TestFetchResource Test")
+
+	testResult := FetchResource("059edd7c-d454-11e6-92b9-374c2fc3d623")
+	t.Log("testresult is ", testResult)
+
 }
 
 func testResource(r1 datastructs.Resource, r2 datastructs.Resource) bool {
