@@ -5,6 +5,9 @@ import (
 	"net/http"
 )
 
+//Mongo database name
+var MongoDBDatabase = "resources"
+
 func main() {
 
 	router := NewRouter()

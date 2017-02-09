@@ -151,9 +151,17 @@ func PostCreateUser(w http.ResponseWriter, r *http.Request) {
 
 }
 
+//TestHandler - a test handler - hello Gorilla
+func TestHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("inside test handler")
+	w.Write([]byte("Gorilla!\n"))
+}
+
 //ResourceCreate - create a resource
 func ResourceCreate(w http.ResponseWriter, r *http.Request) {
 	var resource datastructs.Resource
+	fmt.Println("inside Resource Create")
+	log.Println("inside Resource Create")
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576))
 	if err != nil {
 		panic(err)
@@ -161,13 +169,17 @@ func ResourceCreate(w http.ResponseWriter, r *http.Request) {
 	if err := r.Body.Close(); err != nil {
 		panic(err)
 	}
-	fmt.Println(body)
+	log.Println(body)
 	if err := json.Unmarshal(body, &resource); err != nil {
+		log.Println("Resource create - resouce decoded")
+		InsertResource(resource)
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 		w.WriteHeader(422) // unprocessable entity
 		if err := json.NewEncoder(w).Encode(err); err != nil {
 			panic(err)
 		}
 	}
+	//InsertResource(resource)
+
 	fmt.Println(resource.Address)
 }

@@ -55,6 +55,16 @@ func init() {
 		},
 	})
 
+	ResourceInsert(datastructs.Resource{
+		ID:          "1",
+		Uuid:        "1232-1232-12312-123",
+		OrgId:       "asdf",
+		Description: "test resource",
+		Protected:   "false",
+		Action:      "forward",
+		Address:     "https://surfhawaii.com",
+	})
+
 }
 
 //RepoFindResource - find resources by id
@@ -96,4 +106,18 @@ func UserCreate(user datastructs.User) datastructs.User {
 	}
 	users = append(users, user)
 	return user
+}
+
+// Insert resource into database
+func ResourceInsert(resource datastructs.Resource) {
+
+	c := session.DB("resources").C("res")
+	err = c.Insert(resource)
+
+	if err != nil {
+		log.Println("Unable to insert resource", resource)
+		//return false
+	}
+
+	//return true
 }

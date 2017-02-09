@@ -50,4 +50,10 @@ var routes = Routes{
 		"/createorg",
 		PostCreateOrg,
 	},
+	Route{
+		"TestResource",
+		"get",
+		"/test",
+		TestHandler,
+	},
 }
