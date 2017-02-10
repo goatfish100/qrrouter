@@ -8,70 +8,11 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-//var qrresource QRResource
-var orgs datastructs.Orgs
-var users datastructs.Users
-
-//var jsonsucess JsonSucess
-
-// Give us some seed data
-func init() {
-
-	OrgCreate(datastructs.Org{
-		Orgname:    "Rest Holdings",
-		Address:    "123 H street",
-		City:       "Culver",
-		State:      "CA",
-		Postalcode: "84109",
-		Users: []datastructs.User{{
-			Username: "freegyg",
-			Email:    "freddy@yahoo.com",
-			Name:     "Freddy G Spot",
-			Password: "lsls",
-		}, {
-			Username: "toyo",
-			Email:    "lsl@yahoo.com",
-			Name:     "asdf",
-			Password: "asdf",
-		},
-		}})
-	OrgCreate(datastructs.Org{
-		Orgname:    "awake Holdings",
-		Address:    "123 H street",
-		City:       "Culver",
-		State:      "CA",
-		Postalcode: "84109",
-		Users: []datastructs.User{{
-			Username: "freegyg",
-			Email:    "freddy@yahoo.com",
-			Name:     "Freddy G Spot",
-			Password: "lsls",
-		}, {
-			Username: "toyo",
-			Email:    "lsl@yahoo.com",
-			Name:     "asdf",
-			Password: "asdf",
-		},
-		},
-	})
-
-	ResourceInsert(datastructs.Resource{
-		ID:          "1",
-		Uuid:        "1232-1232-12312-123",
-		OrgId:       "asdf",
-		Description: "test resource",
-		Protected:   "false",
-		Action:      "forward",
-		Address:     "https://surfhawaii.com",
-	})
-
-}
-
 //RepoFindResource - find resources by id
 func RepoFindResource(id string) datastructs.Resource {
 	c := session.DB("resources").C("orgusers")
 	result := datastructs.Resource{}
-	err = c.Find(bson.M{"_id": bson.ObjectIdHex(id)}).One(&result)
+	err = c.Find(bson.M{"_id": id}).One(&result)
 
 	if err != nil {
 		log.Fatal(err)
