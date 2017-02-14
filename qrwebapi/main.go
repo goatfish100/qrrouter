@@ -17,7 +17,7 @@ var users datastructs.Users
 //var jsonsucess JsonSucess
 
 // Give us some seed data
-func init() {
+func insertRecords() {
 
 	OrgCreate(datastructs.Org{
 		Orgname:    "Rest Holdings",
@@ -70,6 +70,7 @@ func init() {
 }
 
 func main() {
+	insertRecords()
 
 	router := NewRouter()
 
