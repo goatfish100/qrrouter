@@ -1,9 +1,0 @@
-{
-	"_id": "2",
-	"uuid": "1232-1232-12312-123",
-	"orgid": "asdfg",
-	"description": "test resource",
-	"protected": "false",
-	"action": "forward",
-	"address": "https://surfaustralia.com"
-}
