@@ -1,0 +1,9 @@
+{
+	"id": "3",
+	"uuid": "2342322",
+	"orgid": "33",
+	"description": "voat",
+	"protected": false,
+	"action": "forward",
+	"address": "http://www.voat.com"
+}
