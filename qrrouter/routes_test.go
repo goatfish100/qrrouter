@@ -51,7 +51,7 @@ func TestUUIDRoute1(t *testing.T) {
 	defer ts.Close()
 
 	// Table driven test
-	var suid = "059edd7c-d454-11e6-92b9-374c2fc3d623"
+	var suid = "444edd7c-d454-11e6-92b9-374c2fc3d623"
 
 	url := ts.URL + "/uuid/" + suid
 
@@ -66,9 +66,9 @@ func TestUUIDRoute1(t *testing.T) {
 func TestUUIDRoute2(t *testing.T) {
 	//r := mux.NewRouter()
 
-	req, err := http.NewRequest("GET", "/uuid/059edd7c-d454-11e6-92b9-374c2fc3d623", nil)
+	req, err := http.NewRequest("GET", "/uuid/444edd7c-d454-11e6-92b9-374c2fc3d623", nil)
 
-	context.Set(req, "key", "059edd7c-d454-11e6-92b9-374c2fc3d623")
+	context.Set(req, "key", "444edd7c-d454-11e6-92b9-374c2fc3d623")
 
 	if err != nil {
 		t.Fatal(err)

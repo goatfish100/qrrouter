@@ -5,7 +5,7 @@ import (
 
 	"gopkg.in/mgo.v2/bson"
 
-	"bitbucket.org/gorouter/datastructs"
+	"bitbucket.org/goatfish100/qrhelperdatastructs"
 )
 
 //FetchResource - fetch resource

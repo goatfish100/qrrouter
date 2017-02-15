@@ -16,8 +16,8 @@ import (
 
 var ()
 
-var resource1 = datastructs.Resource{Uuid: "034c1dd2-d454-11e6-a110-b34e9f2c654a", Description: "yahoo", Protected: "false", Action: "forward", Address: "https://www.yahoo.com"}
-var resource2 = datastructs.Resource{Uuid: "059edd7c-d454-11e6-92b9-374c2fc3d623", Description: "yahoo", Protected: "false", Action: "forward", Address: "https://www.google.com"}
+var resource1 = datastructs.Resource{Uuid: "333c1dd2-d454-11e6-a110-b34e9f2c654a", Description: "yahoo", Protected: "false", Action: "forward", Address: "https://www.yahoo.com"}
+var resource2 = datastructs.Resource{Uuid: "444edd7c-d454-11e6-92b9-374c2fc3d623", Description: "yahoo", Protected: "false", Action: "forward", Address: "https://www.google.com"}
 
 var Server dbtest.DBServer
 
@@ -64,7 +64,7 @@ func TestGetResource(t *testing.T) {
 	t.Log("TestGetResource Test")
 	c := mgosession.DB(MongoDBDatabase).C("res")
 	result := datastructs.Resource{}
-	err = c.Find(bson.M{"uuid": "059edd7c-d454-11e6-92b9-374c2fc3d623"}).One(&result)
+	err = c.Find(bson.M{"uuid": "444edd7c-d454-11e6-92b9-374c2fc3d623"}).One(&result)
 
 	t.Log("test address ", result.Address)
 	if err != nil {
@@ -88,7 +88,7 @@ func TestGetResource(t *testing.T) {
 func TestFetchResource(t *testing.T) {
 	t.Log("TestFetchResource Test")
 
-	testResult := FetchResource("059edd7c-d454-11e6-92b9-374c2fc3d623")
+	testResult := FetchResource("444edd7c-d454-11e6-92b9-374c2fc3d623")
 	t.Log("testresult is ", testResult)
 
 }
