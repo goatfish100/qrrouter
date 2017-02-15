@@ -12,14 +12,12 @@ import (
 
 	"github.com/gorilla/sessions"
 
-	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 
 	"bitbucket.org/gorouter/datastructs"
 )
 
 var store = sessions.NewCookieStore([]byte("something-very-secret"))
-var session, err = mgo.Dial("localhost")
 
 //Index - sample index/test page
 func Index(w http.ResponseWriter, r *http.Request) {
@@ -55,19 +53,12 @@ func GetResource(w http.ResponseWriter, r *http.Request) {
 //GetOrg return all orgs
 func GetOrg(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	//log.Printf("%s\t%s\t%s\t%s")
-	c := session.DB("resources").C("orgusers")
-	org := datastructs.Org{}
-	// number, _ := strconv.Atoi(resourceid)
 
-	//organization := OrgFind(orgId)
-	//err = c.Find(bson.M{"_id": orgId}).One(&org)
 	idQueryier := bson.ObjectIdHex(vars["orgId"])
 	log.Printf("Org identifier%s\t ", idQueryier)
 
-	err = c.Find(bson.M{"_id": idQueryier}).One(&org)
+	org := FindOrg(idQueryier)
 
-	//bson.M{"_id": bson.ObjectIdHex(orgId)}
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 	fmt.Println("inside GetOrg ", org)

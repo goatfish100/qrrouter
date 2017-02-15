@@ -9,7 +9,7 @@ import (
 // Insert resource into database
 func InsertResource(resource datastructs.Resource) {
 
-	if err := session.DB(MongoDBDatabase).C("res").Insert(resource); err != nil {
+	if err := mgosession.DB(MongoDBDatabase).C("res").Insert(resource); err != nil {
 		log.Println("Unable to insert resource", resource)
 		//return false
 	}
