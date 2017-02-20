@@ -5,6 +5,7 @@ import (
 	"log"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
+	"os"
 )
 
 type Person struct {
@@ -13,7 +14,7 @@ type Person struct {
 }
 
 func main() {
-	session, err := mgo.Dial("localhost")
+	session, err := mgo.Dial(os.Getenv("MONGO_HOST"))
 	if err != nil {
 		panic(err)
 	}
