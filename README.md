@@ -42,3 +42,12 @@ This is the main repo - and info wiki for the QR Helper
 * jl - not about local storage
 
 * Saving the instance #docker save gollum > gollum.tar
+
+RUNNING:
+qrrouter - can be run two ways - in Docker and orchestrated with docker-compose or with go with Mongo running on
+locally or in Docker.
+
+Running Locally
+set two environmental variables - like this.  Note: please add a colon in front of port as in :8000
+export MONGO_HOST=localhost
+export QRROUTER_PORT=:8004

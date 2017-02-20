@@ -8,7 +8,7 @@ import (
 
 	"io/ioutil"
 
-	"bitbucket.org/gorouter/datastructs"
+	"bitbucket.org/goatfish100/qrhelperdatastructs"
 
 	"gopkg.in/mgo.v2/bson"
 	"gopkg.in/mgo.v2/dbtest"

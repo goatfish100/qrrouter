@@ -1,11 +1,11 @@
 {
-	"ImportPath": "bitbucket.org/gorouter/qrrouter",
-	"GoVersion": "go1.6",
+	"ImportPath": "bitbucket.org/goatfish100/qrrouter",
+	"GoVersion": "go1.7",
 	"GodepVersion": "v78",
 	"Deps": [
 		{
-			"ImportPath": "bitbucket.org/gorouter/datastructs",
-			"Rev": "0ff717c4b5eb242bbb6eb37c8a33f7c3116c4c51"
+			"ImportPath": "bitbucket.org/goatfish100/qrhelperdatastructs",
+			"Rev": "ef4e3eb94815a5fea3ce4e8e1962b8fa65332c0b"
 		},
 		{
 			"ImportPath": "github.com/Sirupsen/logrus",
@@ -43,10 +43,6 @@
 		{
 			"ImportPath": "github.com/vulcand/oxy/utils",
 			"Rev": "9d07313adea3bb9c7817ea887df6ac79648675f9"
-		},
-		{
-			"ImportPath": "golang.org/x/net/context",
-			"Rev": "094f0373ac667f05c5e8bec3528d8cf91eab7f1e"
 		},
 		{
 			"ImportPath": "golang.org/x/sys/unix",
