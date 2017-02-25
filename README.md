@@ -1,11 +1,13 @@
 # README #
-This is the main repo - and info wiki for the QR Helper
+QR HELPER Application - is a collection of Micro Services
+QRWEBAPI is the Web Api portion
+QRRouter is the router directing traffic to QR Resources
+
 
 ### This is the source code/info repository for the QR Helper project and associated items ###
 
 * Quick summary
 * Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
 
 ### How do I get set up? ###
 
