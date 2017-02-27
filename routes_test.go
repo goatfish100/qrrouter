@@ -21,7 +21,7 @@ func init() {
 
 func TestGorilla(t *testing.T) {
 
-	req, err := http.NewRequest("GET", "/test", nil)
+	req, err := http.NewRequest("GET", "/getorgs", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
