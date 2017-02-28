@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -18,8 +17,6 @@ func NewRouter() *mux.Router {
 	//r.HandleFunc(`/{[a-zA-Z0-9=\-\/\//]+	}`, HomeHandler)
 
 	r.HandleFunc("/uuid/{key}", UUIDHandler)
-	r.HandleFunc("/getResource/{key}", GetResourceHandler)
-
 	r.HandleFunc("/test", TestHandler)
 	http.Handle("/", r)
 	r.NotFoundHandler = http.HandlerFunc(HomeHandler)
@@ -63,22 +60,6 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	fwd, _ := forward.New()
 	fwd.ServeHTTP(w, r)
 
-}
-
-//GetResourceHandler - resouce hander
-func GetResourceHandler(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	fmt.Println(vars["key"])
-	w.Header().Set("Content-Type", "application/vnd.api+json")
-	result := FetchResource(vars["key"])
-	js, err := json.Marshal(result)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	w.Write(js)
 }
 
 func describe(i interface{}) {
