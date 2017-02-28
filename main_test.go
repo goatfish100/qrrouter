@@ -17,17 +17,23 @@ var ()
 
 var resource1 = datastructs.Resource{Uuid: "333c1dd2-d454-11e6-a110-b34e9f2c654a", Description: "yahoo", Protected: "false", Action: "forward", Address: "https://www.yahoo.com"}
 var resource2 = datastructs.Resource{Uuid: "444edd7c-d454-11e6-92b9-374c2fc3d623", Description: "yahoo", Protected: "false", Action: "forward", Address: "https://www.google.com"}
+var resource3 = datastructs.Resource{Uuid: "444edd7c-d454-11e6-92b9-374c2fc3d624", Description: "redirect", Protected: "false", Action: "redirect", Address: "/test"}
+var resource4 = datastructs.Resource{Uuid: "444edd7c-d454-11e6-92b9-374c2fc3d625", Description: "forward", Protected: "false", Action: "forward", Address: "/test"}
 
 var Server dbtest.DBServer
 
 func insertFixtures() {
-
 	if err := mgosession.DB(MongoDBDatabase).C("res").Insert(resource1); err != nil {
 		log.Fatal("Unable to insert test record resource1")
 	}
-
 	if err := mgosession.DB(MongoDBDatabase).C("res").Insert(resource2); err != nil {
 		log.Fatal("Unable to insert test record resource2")
+	}
+	if err := mgosession.DB(MongoDBDatabase).C("res").Insert(resource3); err != nil {
+		log.Fatal("Unable to insert test record resource3")
+	}
+	if err := mgosession.DB(MongoDBDatabase).C("res").Insert(resource4); err != nil {
+		log.Fatal("Unable to insert test record resource4")
 	}
 }
 

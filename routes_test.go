@@ -80,7 +80,7 @@ func TestUUIDRoute2(t *testing.T) {
 	//
 	if rr.Code == 404 {
 		t.Log("asdf")
-		//Log("asdf")
+		t.Fail()
 	}
 	t.Log("testUUIDRoute code ", rr.Code)
 	t.Log("testUUIDRoute code ", rr.Code)
