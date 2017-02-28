@@ -4,12 +4,13 @@ import (
 	"log"
 	"net/http"
 
+	"os"
+
 	"github.com/gorilla/sessions"
 	"gopkg.in/mgo.v2"
-	"os"
 )
 
-var store = sessions.NewCookieStore([]byte("something-very-secret"))
+var store = sessions.NewCookieStore([]byte(os.Getenv("COOKIE_SECRET")))
 var mongohost = os.Getenv("MONGO_HOST")
 
 var mgosession, err = mgo.Dial(mongohost)
