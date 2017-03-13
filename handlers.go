@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/gorilla/mux"
 	"github.com/vulcand/oxy/forward"
@@ -40,7 +41,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	// if a request comes in as /images/image1.jpg
 	// we need to forward to http://resource.com/images/image1.jpg
 	fmt.Println("HomeHandler")
-	session, err := store.Get(r, "gorillasession")
+	session, err := store.Get(r, os.Getenv("COOKIE_SECRET"))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -81,10 +82,11 @@ func UUIDHandler(w http.ResponseWriter, r *http.Request) {
 		r.RequestURI = ""
 
 		if result.Action == "forward" {
+			log.Println("http forward called")
 			http.Redirect(w, r, result.Address, http.StatusFound)
 		}
 
-		session, err := store.Get(r, "gorillasession")
+		session, err := store.Get(r, os.Getenv("COOKIE_SECRET"))
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
