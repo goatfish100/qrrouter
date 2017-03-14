@@ -53,3 +53,13 @@ Running Locally
 set two environmental variables - like this.  Note: please add a colon in front of port as in :8000
 export MONGO_HOST=localhost
 export QRROUTER_PORT=:8004
+
+Dependencies/Building:
+godeps is not used for package management and versioning -
+In this folder there is GoDeps which has a json file with versions
+and vendor file where the libraries are stored.
+
+saving Dependencies
+'godep save'
+
+'godep go install' to build
