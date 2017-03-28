@@ -49,25 +49,24 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Retrieve our struct and type-assert it
 	val := session.Values["redirection_url"].(string)
-	fmt.Println("redirection url", val)
-	fmt.Println("requested url", r.URL.String())
-	//describe(val)
+	fmt.Println("proxy session url", val)
+	fmt.Println("proxy url", r.URL.String())
 
 	//itemaddress = val + r.URL.String()
 	fmt.Println(val + r.URL.String())
 	r.URL = testutils.ParseURI(val + r.URL.String())
-	// // r.RequestURI = ""
-	// //
+
 	fwd, _ := forward.New()
 	fwd.ServeHTTP(w, r)
 
 }
 
-func describe(i interface{}) {
-	fmt.Printf("(%v, %T)\n", i, i)
-}
-
 //UUIDHandler This handler is to handle _ send resource on thier way
+//either by proxying/forward the request or redirect
+//Since - some sites may have additional resources - with just relative path - as in
+// /images/icon1.jpg ... /js/library1.js
+// we create a session - and handle these resources
+// in homehandler
 func UUIDHandler(w http.ResponseWriter, r *http.Request) {
 	log.Println("inside UUIDHandler")
 
@@ -81,11 +80,16 @@ func UUIDHandler(w http.ResponseWriter, r *http.Request) {
 		r.URL = testutils.ParseURI(result.Address)
 		r.RequestURI = ""
 
-		if result.Action == "forward" {
-			log.Println("http forward called")
+		//redirect the url
+		if result.Action == "redirect" {
+			log.Println("http redirect called")
 			http.Redirect(w, r, result.Address, http.StatusFound)
+			log.Println("redirecting")
 		}
 
+		log.Println("Proxying")
+
+		// Proxy the result through service
 		session, err := store.Get(r, os.Getenv("COOKIE_SECRET"))
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -96,6 +100,8 @@ func UUIDHandler(w http.ResponseWriter, r *http.Request) {
 		session.Values["redirection_url"] = saddress
 		session.Save(r, w)
 
+		//forward.New() - is proxying connection
+		log.Println(r.URL)
 		fwd, _ := forward.New()
 		fwd.ServeHTTP(w, r)
 	} else {
