@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -9,6 +10,8 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/vulcand/oxy/forward"
 	"github.com/vulcand/oxy/testutils"
+
+	"github.com/minio/minio-go"
 )
 
 //NewRouter - new Gorilla Router
@@ -19,11 +22,12 @@ func NewRouter() *mux.Router {
 
 	r.HandleFunc("/uuid/{key}", UUIDHandler)
 	r.HandleFunc("/test", TestHandler)
+	r.HandleFunc("/amazon", AmazonS3Handler)
 	http.Handle("/", r)
 	r.NotFoundHandler = http.HandlerFunc(HomeHandler)
 
 	//r.PathPrefix("/jlsone/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("/home/jamesl/gowork/src/bitbucket.org/gorillaweb/static"))))
-	r.PathPrefix("/jlsone/").Handler(http.FileServer(http.Dir(http.Dir("/home/jamesl/gowork/src/bitbucket.org/gorillaweb/static"))))
+	r.PathPrefix("/jlsone/").Handler(http.FileServer(http.Dir(http.Dir("./static"))))
 
 	return r
 }
@@ -55,6 +59,48 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	//itemaddress = val + r.URL.String()
 	fmt.Println(val + r.URL.String())
 	r.URL = testutils.ParseURI(val + r.URL.String())
+
+	fwd, _ := forward.New()
+	fwd.ServeHTTP(w, r)
+
+}
+
+//AmazonS3Handler proxy request home handler
+func AmazonS3Handler(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("AmazonS3Handler")
+
+	s3Client, err := minio.New("s3.amazonaws.com", "AKIAJ7K7I7KUWLIR6CEA", "PBJn37kTAHt5Jbk0ELR6NqnQkHuxlmrCx/Rehf4h", true)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	reader, err := s3Client.GetObject("goatfish100", "test_folder/vouncher.pdf")
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+	defer reader.Close()
+
+	localFile, err := os.Create("my-testfile")
+	if err != nil {
+		log.Fatalln(err)
+	}
+	defer localFile.Close()
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	w.Header().Set("Content-Disposition", localFile.Name())
+	//w.Header().Set("Content-Type", r.Header.Get("Content-Type"))
+	w.Header().Set("Content-Type", "pdf")
+
+	b, err := ioutil.ReadAll(reader)
+	if err != nil {
+		log.Fatal(err)
+	}
+	w.Write(b)
+	fmt.Fprintf(w, "Hi there, I love %s!", r.URL.Path[1:])
 
 	fwd, _ := forward.New()
 	fwd.ServeHTTP(w, r)
