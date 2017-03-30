@@ -22,7 +22,6 @@ func NewRouter() *mux.Router {
 
 	r.HandleFunc("/uuid/{key}", UUIDHandler)
 	r.HandleFunc("/test", TestHandler)
-	r.HandleFunc("/amazon", AmazonS3Handler)
 	http.Handle("/", r)
 	r.NotFoundHandler = http.HandlerFunc(HomeHandler)
 
@@ -66,34 +65,34 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 //AmazonS3Handler proxy request home handler
-func AmazonS3Handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("AmazonS3Handler")
+func AmazonS3Handler(w http.ResponseWriter, r *http.Request, resource string) {
+	fmt.Println("----AmazonS3Handler")
 
-	//s3Client, err := minio.New(AWSURL, AWSKEY, AWSPASSPHRASE, true)
-	s3Client, err := minio.New("s3.amazonaws.com", "AKIAJ7K7I7KUWLIR6CEA", "PBJn37kTAHt5Jbk0ELR6NqnQkHuxlmrCx/Rehf4h", true)
+	s3Client, err := minio.New(AWSURL, AWSKEY, AWSPASSPHRASE, true)
+	//s3Client, err := minio.New("s3.amazonaws.com", "AKIAJ7K7I7KUWLIR6CEA", "PBJn37kTAHt5Jbk0ELR6NqnQkHuxlmrCx/Rehf4h", true)
 
 	if err != nil {
-		log.Fatalln(err)
+		log.Fatal(err)
 	}
 
-	reader, err := s3Client.GetObject("goatfish100", "test_folder/vouncher.pdf")
+	reader, err := s3Client.GetObject(AWSBUCKET, resource)
 
 	if err != nil {
 		log.Fatalln(err)
 	}
 	defer reader.Close()
 
-	localFile, err := os.Create("my-testfile")
-	if err != nil {
-		log.Fatalln(err)
-	}
-	defer localFile.Close()
+	// localFile, err := os.Create("my-testfile")
+	// if err != nil {
+	// 	log.Fatalln(err)
+	// }
+	// defer localFile.Close()
 
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	w.Header().Set("Content-Disposition", localFile.Name())
+	w.Header().Set("Content-Disposition", resource)
 	//w.Header().Set("Content-Type", r.Header.Get("Content-Type"))
 	w.Header().Set("Content-Type", "pdf")
 
@@ -102,7 +101,7 @@ func AmazonS3Handler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 	w.Write(b)
-	fmt.Fprintf(w, "Hi there, I love %s!", r.URL.Path[1:])
+	//fmt.Fprintf(w, "Hi there, I love %s!", r.URL.Path[1:])
 
 	fwd, _ := forward.New()
 	fwd.ServeHTTP(w, r)
@@ -143,19 +142,25 @@ func UUIDHandler(w http.ResponseWriter, r *http.Request) {
 
 		log.Println("the address is " + result.Address)
 		var saddress = result.Address
-		r.URL = testutils.ParseURI(result.Address)
-		r.RequestURI = ""
 
 		//redirect the url
+		log.Println("before IF block")
 		if result.Action == "redirect" {
-			log.Println("http redirect called")
+			r.URL = testutils.ParseURI(result.Address)
+			r.RequestURI = ""
+			log.Println("...http redirect called")
 			http.Redirect(w, r, result.Address, http.StatusFound)
 			log.Println("redirecting")
-		} else {
+		} else if result.Action == "proxy" {
+			r.URL = testutils.ParseURI(result.Address)
+			r.RequestURI = ""
+			log.Println("...Proxying")
 			PROXYHandler(w, r, saddress)
+		} else {
+			log.Println("...AmazonS3Handler")
+			AmazonS3Handler(w, r, result.Address)
 		}
-
-		log.Println("Proxying")
+		log.Println("no catch found")
 
 	} else {
 		//TODO - Forward/send to real not found resource

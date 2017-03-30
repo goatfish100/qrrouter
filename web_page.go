@@ -15,6 +15,7 @@ var mongohost = os.Getenv("MONGO_HOST")
 var AWSURL = os.Getenv("AWS_URL")
 var AWSKEY = os.Getenv("AWS_KEY")
 var AWSPASSPHRASE = os.Getenv("AWS_PASSPHRASE")
+var AWSBUCKET = os.Getenv("AWS_BUCKET")
 
 var mgosession, err = mgo.Dial(mongohost)
 
