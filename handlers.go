@@ -5,7 +5,9 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"net/url"
 	"os"
+	"time"
 
 	"github.com/gorilla/mux"
 	"github.com/vulcand/oxy/forward"
@@ -69,7 +71,6 @@ func AmazonS3Handler(w http.ResponseWriter, r *http.Request, resource string) {
 	fmt.Println("----AmazonS3Handler")
 
 	s3Client, err := minio.New(AWSURL, AWSKEY, AWSPASSPHRASE, true)
-	//s3Client, err := minio.New("s3.amazonaws.com", "AKIAJ7K7I7KUWLIR6CEA", "PBJn37kTAHt5Jbk0ELR6NqnQkHuxlmrCx/Rehf4h", true)
 
 	if err != nil {
 		log.Fatal(err)
@@ -82,18 +83,11 @@ func AmazonS3Handler(w http.ResponseWriter, r *http.Request, resource string) {
 	}
 	defer reader.Close()
 
-	// localFile, err := os.Create("my-testfile")
-	// if err != nil {
-	// 	log.Fatalln(err)
-	// }
-	// defer localFile.Close()
-
 	if err != nil {
 		log.Fatalln(err)
 	}
 
 	w.Header().Set("Content-Disposition", resource)
-	//w.Header().Set("Content-Type", r.Header.Get("Content-Type"))
 	w.Header().Set("Content-Type", "pdf")
 
 	b, err := ioutil.ReadAll(reader)
@@ -101,11 +95,63 @@ func AmazonS3Handler(w http.ResponseWriter, r *http.Request, resource string) {
 		log.Fatal(err)
 	}
 	w.Write(b)
-	//fmt.Fprintf(w, "Hi there, I love %s!", r.URL.Path[1:])
 
 	fwd, _ := forward.New()
 	fwd.ServeHTTP(w, r)
+}
 
+//AmazonS3Handler getnerate downlink link
+func AmazonS3URIHandler(w http.ResponseWriter, r *http.Request, resource string) {
+	log.Println("...AmazonS3URIHandler Handler ")
+	// Set request parameters for content-disposition.
+	minioClient, err := minio.New(AWSURL, AWSKEY, AWSPASSPHRASE, true)
+
+	reqParams := make(url.Values)
+	reqParams.Set("response-content-disposition", "attachment; filename=\"test.txt\"")
+
+	// Generates a presigned url which expires in a day.
+	presignedURL, err := minioClient.PresignedGetObject("mybucket", "myobject", time.Duration(1000)*time.Second, reqParams)
+
+	log.Println("...http redirect called")
+	http.Redirect(w, r, presignedURL.String(), http.StatusFound)
+	log.Println("redirecting")
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	log.Println("Pre signed url is ", presignedURL)
+	// 	fmt.Println("----AmazonS3Handler")
+	//
+	// 	s3Client, err := minio.New(AWSURL, AWSKEY, AWSPASSPHRASE, true)
+	//
+	// 	if err != nil {
+	// 		log.Fatal(err)
+	// 	}
+	//
+	// 	reader, err := s3Client.GetObject(AWSBUCKET, resource)
+	//
+	// 	if err != nil {
+	// 		log.Fatalln(err)
+	// 	}
+	// 	defer reader.Close()
+	//
+	// 	if err != nil {
+	// 		log.Fatalln(err)
+	// 	}
+	//
+	// 	w.Header().Set("Content-Disposition", resource)
+	// 	w.Header().Set("Content-Type", "pdf")
+	//
+	// 	b, err := ioutil.ReadAll(reader)
+	// 	if err != nil {
+	// 		log.Fatal(err)
+	// 	}
+	// 	w.Write(b)
+	//
+	// 	fwd, _ := forward.New()
+	// 	fwd.ServeHTTP(w, r)
 }
 
 func PROXYHandler(w http.ResponseWriter, r *http.Request, address string) {
@@ -156,9 +202,12 @@ func UUIDHandler(w http.ResponseWriter, r *http.Request) {
 			r.RequestURI = ""
 			log.Println("...Proxying")
 			PROXYHandler(w, r, saddress)
-		} else {
+		} else if result.Action == "s3serve" {
 			log.Println("...AmazonS3Handler")
 			AmazonS3Handler(w, r, result.Address)
+		} else if result.Action == "s3redirect" {
+			log.Println("...AmazonS3Handler")
+			AmazonS3URIHandler(w, r, result.Address)
 		}
 		log.Println("no catch found")
 
