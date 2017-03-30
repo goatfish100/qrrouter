@@ -69,7 +69,9 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 func AmazonS3Handler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("AmazonS3Handler")
 
+	//s3Client, err := minio.New(AWSURL, AWSKEY, AWSPASSPHRASE, true)
 	s3Client, err := minio.New("s3.amazonaws.com", "AKIAJ7K7I7KUWLIR6CEA", "PBJn37kTAHt5Jbk0ELR6NqnQkHuxlmrCx/Rehf4h", true)
+
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -107,6 +109,24 @@ func AmazonS3Handler(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func PROXYHandler(w http.ResponseWriter, r *http.Request, address string) {
+	// Proxy the result through service
+	session, err := store.Get(r, os.Getenv("COOKIE_SECRET"))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Set some session values.
+	session.Values["redirection_url"] = address
+	session.Save(r, w)
+
+	//forward.New() - is proxying connection
+	log.Println(r.URL)
+	fwd, _ := forward.New()
+	fwd.ServeHTTP(w, r)
+}
+
 //UUIDHandler This handler is to handle _ send resource on thier way
 //either by proxying/forward the request or redirect
 //Since - some sites may have additional resources - with just relative path - as in
@@ -131,25 +151,12 @@ func UUIDHandler(w http.ResponseWriter, r *http.Request) {
 			log.Println("http redirect called")
 			http.Redirect(w, r, result.Address, http.StatusFound)
 			log.Println("redirecting")
+		} else {
+			PROXYHandler(w, r, saddress)
 		}
 
 		log.Println("Proxying")
 
-		// Proxy the result through service
-		session, err := store.Get(r, os.Getenv("COOKIE_SECRET"))
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-
-		// Set some session values.
-		session.Values["redirection_url"] = saddress
-		session.Save(r, w)
-
-		//forward.New() - is proxying connection
-		log.Println(r.URL)
-		fwd, _ := forward.New()
-		fwd.ServeHTTP(w, r)
 	} else {
 		//TODO - Forward/send to real not found resource
 		log.Println("UUIDHandler - no resource found for ", vars["key"])

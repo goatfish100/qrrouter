@@ -12,6 +12,9 @@ import (
 
 var store = sessions.NewCookieStore([]byte(os.Getenv("COOKIE_SECRET")))
 var mongohost = os.Getenv("MONGO_HOST")
+var AWSURL = os.Getenv("AWS_URL")
+var AWSKEY = os.Getenv("AWS_KEY")
+var AWSPASSPHRASE = os.Getenv("AWS_PASSPHRASE")
 
 var mgosession, err = mgo.Dial(mongohost)
 
