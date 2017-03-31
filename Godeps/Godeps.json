@@ -33,6 +33,31 @@
 			"Rev": "83c8db3bdc9be789e57e3756ffbcffd2d7d40176"
 		},
 		{
+			"ImportPath": "github.com/minio/minio-go",
+			"Comment": "v2.0.4-13-g29b0515",
+			"Rev": "29b05151452ac74ee9b46c93c2200f8b57331e24"
+		},
+		{
+			"ImportPath": "github.com/minio/minio-go/pkg/policy",
+			"Comment": "v2.0.4-13-g29b0515",
+			"Rev": "29b05151452ac74ee9b46c93c2200f8b57331e24"
+		},
+		{
+			"ImportPath": "github.com/minio/minio-go/pkg/s3signer",
+			"Comment": "v2.0.4-13-g29b0515",
+			"Rev": "29b05151452ac74ee9b46c93c2200f8b57331e24"
+		},
+		{
+			"ImportPath": "github.com/minio/minio-go/pkg/s3utils",
+			"Comment": "v2.0.4-13-g29b0515",
+			"Rev": "29b05151452ac74ee9b46c93c2200f8b57331e24"
+		},
+		{
+			"ImportPath": "github.com/minio/minio-go/pkg/set",
+			"Comment": "v2.0.4-13-g29b0515",
+			"Rev": "29b05151452ac74ee9b46c93c2200f8b57331e24"
+		},
+		{
 			"ImportPath": "github.com/vulcand/oxy/forward",
 			"Rev": "9d07313adea3bb9c7817ea887df6ac79648675f9"
 		},
