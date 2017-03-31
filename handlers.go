@@ -46,7 +46,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	// if a request comes in as /images/image1.jpg
 	// we need to forward to http://resource.com/images/image1.jpg
 	fmt.Println("HomeHandler")
-	session, err := store.Get(r, os.Getenv("COOKIE_SECRET"))
+	session, err := CookieStore.Get(r, os.Getenv("COOKIE_SECRET"))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -70,13 +70,13 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 func AmazonS3Handler(w http.ResponseWriter, r *http.Request, resource string) {
 	fmt.Println("----AmazonS3Handler")
 
-	s3Client, err := minio.New(AWSURL, AWSKEY, AWSPASSPHRASE, true)
+	s3Client, err := minio.New(AwsURL, AwsKey, AwsPassPhrase, true)
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	reader, err := s3Client.GetObject(AWSBUCKET, resource)
+	reader, err := s3Client.GetObject(AwsBucket, resource)
 
 	if err != nil {
 		log.Fatalln(err)
@@ -100,9 +100,9 @@ func AmazonS3Handler(w http.ResponseWriter, r *http.Request, resource string) {
 	fwd.ServeHTTP(w, r)
 }
 
-//AmazonS3Handler getnerate downlink link
+//AmazonS3URIHandler getnerate downlink link
 func AmazonS3URIHandler(w http.ResponseWriter, r *http.Request, resource string) {
-	s3Client, err := minio.New(AWSURL, AWSKEY, AWSPASSPHRASE, true)
+	s3Client, err := minio.New(AwsURL, AwsKey, AwsPassPhrase, true)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -112,7 +112,7 @@ func AmazonS3URIHandler(w http.ResponseWriter, r *http.Request, resource string)
 	reqParams.Set("response-content-disposition", "attachment; filename=\""+resource+"\"")
 
 	// Gernerate presigned get object url.
-	presignedURL, err := s3Client.PresignedGetObject(AWSBUCKET, resource, time.Duration(1000)*time.Second, reqParams)
+	presignedURL, err := s3Client.PresignedGetObject(AwsBucket, resource, time.Duration(1000)*time.Second, reqParams)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -121,9 +121,10 @@ func AmazonS3URIHandler(w http.ResponseWriter, r *http.Request, resource string)
 
 }
 
+//PROXYHandler is a proxying/routine for URL's to be served from QRRouter
 func PROXYHandler(w http.ResponseWriter, r *http.Request, address string) {
 	// Proxy the result through service
-	session, err := store.Get(r, os.Getenv("COOKIE_SECRET"))
+	session, err := CookieStore.Get(r, os.Getenv("COOKIE_SECRET"))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

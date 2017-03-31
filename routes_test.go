@@ -21,8 +21,8 @@ func init() {
 
 func TestGorilla(t *testing.T) {
 
-	req, err := http.NewRequest("GET", "/getorgs", nil)
-	if err != nil {
+	req, errg := http.NewRequest("GET", "/getorgs", nil)
+	if errg != nil {
 		t.Fatal(err)
 	}
 	rr := httptest.NewRecorder()
@@ -55,9 +55,9 @@ func TestUUIDRoute1(t *testing.T) {
 
 	url := ts.URL + "/uuid/" + suid
 
-	resp, err := http.Get(url)
-	if err != nil {
-		t.Fatal(err)
+	resp, errget := http.Get(url)
+	if errget != nil {
+		t.Fatal(errget)
 	}
 
 	log.Println("status is ", resp.StatusCode)
@@ -66,11 +66,11 @@ func TestUUIDRoute1(t *testing.T) {
 func TestUUIDRoute2(t *testing.T) {
 	//r := mux.NewRouter()
 
-	req, err := http.NewRequest("GET", "/uuid/444edd7c-d454-11e6-92b9-374c2fc3d623", nil)
+	req, err2 := http.NewRequest("GET", "/uuid/444edd7c-d454-11e6-92b9-374c2fc3d623", nil)
 
 	context.Set(req, "key", "444edd7c-d454-11e6-92b9-374c2fc3d623")
 
-	if err != nil {
+	if err2 != nil {
 		t.Fatal(err)
 	}
 	rr := httptest.NewRecorder()

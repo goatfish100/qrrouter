@@ -10,7 +10,7 @@ import (
 
 //FetchResource - fetch resource
 func FetchResource(resourceid string) datastructs.Resource {
-	c := mgosession.DB(MongoDBDatabase).C("res")
+	c := MgoSession.DB(MongoDBDatabase).C("res")
 	result := datastructs.Resource{}
 	err = c.Find(bson.M{"uuid": resourceid}).One(&result)
 

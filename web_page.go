@@ -10,14 +10,26 @@ import (
 	"gopkg.in/mgo.v2"
 )
 
-var store = sessions.NewCookieStore([]byte(os.Getenv("COOKIE_SECRET")))
-var mongohost = os.Getenv("MONGO_HOST")
-var AWSURL = os.Getenv("AWS_URL")
-var AWSKEY = os.Getenv("AWS_KEY")
-var AWSPASSPHRASE = os.Getenv("AWS_PASSPHRASE")
-var AWSBUCKET = os.Getenv("AWS_BUCKET")
+//MongoHost - the mongo host name
+var MongoHost = os.Getenv("MONGO_HOST")
 
-var mgosession, err = mgo.Dial(mongohost)
+//CookieStore - the cookie store/encrypt phrase
+var CookieStore = sessions.NewCookieStore([]byte(os.Getenv("COOKIE_SECRET")))
+
+//AwsURL - Amazon AWS url
+var AwsURL = os.Getenv("AWS_URL")
+
+//AwsKey - Amazon AWS key
+var AwsKey = os.Getenv("AWS_KEY")
+
+//AwsPassPhrase - Amazon AWS passphrase
+var AwsPassPhrase = os.Getenv("AWS_PASSPHRASE")
+
+//AwsBucket - Amazon AWS Bucket
+var AwsBucket = os.Getenv("AWS_BUCKET")
+
+//MgoSession - Amazon AWS key
+var MgoSession, err = mgo.Dial(MongoHost)
 
 //MongoDBDatabase - mongo database name
 var MongoDBDatabase = "resources"

@@ -23,16 +23,16 @@ var resource4 = datastructs.Resource{Uuid: "444edd7c-d454-11e6-92b9-374c2fc3d625
 var Server dbtest.DBServer
 
 func insertFixtures() {
-	if err := mgosession.DB(MongoDBDatabase).C("res").Insert(resource1); err != nil {
+	if err := MgoSession.DB(MongoDBDatabase).C("res").Insert(resource1); err != nil {
 		log.Fatal("Unable to insert test record resource1")
 	}
-	if err := mgosession.DB(MongoDBDatabase).C("res").Insert(resource2); err != nil {
+	if err := MgoSession.DB(MongoDBDatabase).C("res").Insert(resource2); err != nil {
 		log.Fatal("Unable to insert test record resource2")
 	}
-	if err := mgosession.DB(MongoDBDatabase).C("res").Insert(resource3); err != nil {
+	if err := MgoSession.DB(MongoDBDatabase).C("res").Insert(resource3); err != nil {
 		log.Fatal("Unable to insert test record resource3")
 	}
-	if err := mgosession.DB(MongoDBDatabase).C("res").Insert(resource4); err != nil {
+	if err := MgoSession.DB(MongoDBDatabase).C("res").Insert(resource4); err != nil {
 		log.Fatal("Unable to insert test record resource4")
 	}
 }
@@ -44,7 +44,7 @@ func TestMain(m *testing.M) {
 	Server.SetPath(tempDir)
 
 	// My main session var is now set to the temporary MongoDB instance
-	mgosession = Server.Session()
+	MgoSession = Server.Session()
 	insertFixtures()
 	// Run the test suite
 
@@ -54,8 +54,8 @@ func TestMain(m *testing.M) {
 	// Make sure we DropDatabase so we make absolutely sure nothing is left or locked while wiping the data and
 	// close session
 
-	mgosession.DB(MongoDBDatabase).DropDatabase()
-	mgosession.Close()
+	MgoSession.DB(MongoDBDatabase).DropDatabase()
+	MgoSession.Close()
 
 	Server.Stop()
 
