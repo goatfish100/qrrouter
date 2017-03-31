@@ -102,56 +102,23 @@ func AmazonS3Handler(w http.ResponseWriter, r *http.Request, resource string) {
 
 //AmazonS3Handler getnerate downlink link
 func AmazonS3URIHandler(w http.ResponseWriter, r *http.Request, resource string) {
-	log.Println("...AmazonS3URIHandler Handler ")
-	// Set request parameters for content-disposition.
-	minioClient, err := minio.New(AWSURL, AWSKEY, AWSPASSPHRASE, true)
-
-	reqParams := make(url.Values)
-	reqParams.Set("response-content-disposition", "attachment; filename=\"test.txt\"")
-
-	// Generates a presigned url which expires in a day.
-	presignedURL, err := minioClient.PresignedGetObject("mybucket", "myobject", time.Duration(1000)*time.Second, reqParams)
-
-	log.Println("...http redirect called")
-	http.Redirect(w, r, presignedURL.String(), http.StatusFound)
-	log.Println("redirecting")
-
+	s3Client, err := minio.New(AWSURL, AWSKEY, AWSPASSPHRASE, true)
 	if err != nil {
-		fmt.Println(err)
-		return
+		log.Fatalln(err)
 	}
 
-	log.Println("Pre signed url is ", presignedURL)
-	// 	fmt.Println("----AmazonS3Handler")
-	//
-	// 	s3Client, err := minio.New(AWSURL, AWSKEY, AWSPASSPHRASE, true)
-	//
-	// 	if err != nil {
-	// 		log.Fatal(err)
-	// 	}
-	//
-	// 	reader, err := s3Client.GetObject(AWSBUCKET, resource)
-	//
-	// 	if err != nil {
-	// 		log.Fatalln(err)
-	// 	}
-	// 	defer reader.Close()
-	//
-	// 	if err != nil {
-	// 		log.Fatalln(err)
-	// 	}
-	//
-	// 	w.Header().Set("Content-Disposition", resource)
-	// 	w.Header().Set("Content-Type", "pdf")
-	//
-	// 	b, err := ioutil.ReadAll(reader)
-	// 	if err != nil {
-	// 		log.Fatal(err)
-	// 	}
-	// 	w.Write(b)
-	//
-	// 	fwd, _ := forward.New()
-	// 	fwd.ServeHTTP(w, r)
+	// Set request parameters
+	reqParams := make(url.Values)
+	reqParams.Set("response-content-disposition", "attachment; filename=\""+resource+"\"")
+
+	// Gernerate presigned get object url.
+	presignedURL, err := s3Client.PresignedGetObject(AWSBUCKET, resource, time.Duration(1000)*time.Second, reqParams)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	log.Println("pre signed url", presignedURL)
+	http.Redirect(w, r, presignedURL.String(), http.StatusFound)
+
 }
 
 func PROXYHandler(w http.ResponseWriter, r *http.Request, address string) {
