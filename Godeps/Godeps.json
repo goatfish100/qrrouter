@@ -5,7 +5,7 @@
 	"Deps": [
 		{
 			"ImportPath": "bitbucket.org/goatfish100/qrhelperdatastructs",
-			"Rev": "d5f0f5306be4a1f0d3710c8a83911b9c6fdb2222"
+			"Rev": "0e41fb897cfaf00ca9f03c99401b045a9aa1b4cd"
 		},
 		{
 			"ImportPath": "github.com/Sirupsen/logrus",

@@ -67,7 +67,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 //AmazonS3Handler proxy request home handler
-func AmazonS3Handler(w http.ResponseWriter, r *http.Request, resource string) {
+func AmazonS3Handler(w http.ResponseWriter, r *http.Request, resource string, filename string) {
 	fmt.Println("----AmazonS3Handler")
 
 	s3Client, err := minio.New(AwsURL, AwsKey, AwsPassPhrase, true)
@@ -87,7 +87,7 @@ func AmazonS3Handler(w http.ResponseWriter, r *http.Request, resource string) {
 		log.Fatalln(err)
 	}
 
-	w.Header().Set("Content-Disposition", resource)
+	w.Header().Set("Content-Disposition", filename)
 	w.Header().Set("Content-Type", "pdf")
 
 	b, err := ioutil.ReadAll(reader)
@@ -101,7 +101,7 @@ func AmazonS3Handler(w http.ResponseWriter, r *http.Request, resource string) {
 }
 
 //AmazonS3URIHandler getnerate downlink link
-func AmazonS3URIHandler(w http.ResponseWriter, r *http.Request, resource string) {
+func AmazonS3URIHandler(w http.ResponseWriter, r *http.Request, resource string, filename string) {
 	s3Client, err := minio.New(AwsURL, AwsKey, AwsPassPhrase, true)
 	if err != nil {
 		log.Fatalln(err)
@@ -109,7 +109,7 @@ func AmazonS3URIHandler(w http.ResponseWriter, r *http.Request, resource string)
 
 	// Set request parameters
 	reqParams := make(url.Values)
-	reqParams.Set("response-content-disposition", "attachment; filename=\""+resource+"\"")
+	reqParams.Set("response-content-disposition", "attachment; filename=\""+filename+"\"")
 
 	// Gernerate presigned get object url.
 	presignedURL, err := s3Client.PresignedGetObject(AwsBucket, resource, time.Duration(1000)*time.Second, reqParams)
@@ -172,10 +172,10 @@ func UUIDHandler(w http.ResponseWriter, r *http.Request) {
 			PROXYHandler(w, r, saddress)
 		} else if result.Action == "s3serve" {
 			log.Println("...AmazonS3Handler")
-			AmazonS3Handler(w, r, result.Address)
+			AmazonS3Handler(w, r, result.Address, result.Name)
 		} else if result.Action == "s3redirect" {
 			log.Println("...AmazonS3Handler")
-			AmazonS3URIHandler(w, r, result.Address)
+			AmazonS3URIHandler(w, r, result.Address, result.Name)
 		}
 		log.Println("no catch found")
 
