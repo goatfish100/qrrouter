@@ -22,21 +22,15 @@ QRRouter is the router directing traffic to QR Resources
 * git clone the source into the folder git
 * git clone git@bitbucket.org:goatfish100/gorouter.git
 * git clone
-*  go get github.com/gorilla/mux
-*  go get github.com/gorilla/sessions
-*  go get github.com/vulcand/oxy/forward
-*  go get github.com/vulcand/oxy/testutils
-*  go get gopkg.in/mgo.v2
-*  go get gopkg.in/mgo.v2
-*  go get gopkg.in/mgo.v2
-*  go get gopkg.in/mgo.v2/bson
+* The dependencies are now stored in godep folder
 
 
 ### Database - Mongo ###
 
 * Mongodb is started with the docker-compose
-* load initial data from gorillaweb/database/resources.json
-* mongoimport --db test4 --collection res --file resources.json
+* the database is currently manually loaded with
+* load('mongojsload.js') command from the mongo shell
+* mongojsload.js is currently in qrhelpermongo folder
 
 ### Gollum Wiki ###
 

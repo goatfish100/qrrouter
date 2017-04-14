@@ -87,16 +87,19 @@ func AmazonS3Handler(w http.ResponseWriter, r *http.Request, resource string, fi
 		log.Fatalln(err)
 	}
 
-	w.Header().Set("Content-Disposition", filename)
+	w.Header().Set("Content-Disposition: inline; filename=", filename)
 	w.Header().Set("Content-Type", "pdf")
+	//Content-Disposition: inline; filename="myfile.txt"
 
 	b, err := ioutil.ReadAll(reader)
+
 	if err != nil {
 		log.Fatal(err)
 	}
 	w.Write(b)
 
 	fwd, _ := forward.New()
+
 	fwd.ServeHTTP(w, r)
 }
 
