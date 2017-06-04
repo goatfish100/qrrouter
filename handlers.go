@@ -79,12 +79,15 @@ func AmazonS3Handler(w http.ResponseWriter, r *http.Request, resource string, fi
 	reader, err := s3Client.GetObject(AwsBucket, resource)
 
 	if err != nil {
-		log.Fatalln(err)
+		log.Println("AmazonS3Handler Error openning S3 connection")
+		panic(err)
 	}
 	defer reader.Close()
 
 	if err != nil {
-		log.Fatalln(err)
+		log.Println("AmazonS3Handler Error closing S3 connection")
+
+		panic(err)
 	}
 
 	w.Header().Set("Content-Disposition: inline; filename=", filename)
@@ -94,7 +97,8 @@ func AmazonS3Handler(w http.ResponseWriter, r *http.Request, resource string, fi
 	b, err := ioutil.ReadAll(reader)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Println("AmazonS3Handler readall err")
+		panic(err)
 	}
 	w.Write(b)
 
@@ -107,7 +111,8 @@ func AmazonS3Handler(w http.ResponseWriter, r *http.Request, resource string, fi
 func AmazonS3URIHandler(w http.ResponseWriter, r *http.Request, resource string, filename string) {
 	s3Client, err := minio.New(AwsURL, AwsKey, AwsPassPhrase, true)
 	if err != nil {
-		log.Fatalln(err)
+		log.Println("AmazonS3URIHandler readall err")
+		panic(err)
 	}
 
 	// Set request parameters
@@ -117,7 +122,8 @@ func AmazonS3URIHandler(w http.ResponseWriter, r *http.Request, resource string,
 	// Gernerate presigned get object url.
 	presignedURL, err := s3Client.PresignedGetObject(AwsBucket, resource, time.Duration(1000)*time.Second, reqParams)
 	if err != nil {
-		log.Fatalln(err)
+		log.Println("AmazonS3URIHandler Error getting pre signed url")
+		panic(err)
 	}
 	log.Println("pre signed url", presignedURL)
 	http.Redirect(w, r, presignedURL.String(), http.StatusFound)

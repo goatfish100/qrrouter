@@ -85,6 +85,6 @@ func TestUUIDRoute2(t *testing.T) {
 	t.Log("testUUIDRoute code ", rr.Code)
 	t.Log("testUUIDRoute code ", rr.Code)
 	//fmt.Println(rr.Result())
-	t.Log(string(rr.Body.Bytes()))
+	t.Log("TestUUIDRoute2", string(rr.Body.Bytes()))
 
 }

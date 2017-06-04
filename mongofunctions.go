@@ -16,6 +16,7 @@ func FetchResource(resourceid string) datastructs.Resource {
 
 	if err != nil {
 		log.Print(err)
+		panic(err)
 	}
 	log.Println("leaving FetchResource")
 	return result
