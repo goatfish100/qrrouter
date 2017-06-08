@@ -44,9 +44,9 @@ qrrouter - can be run two ways - in Docker and orchestrated with docker-compose 
 locally or in Docker.
 
 Running Locally
-set two environmental variables - like this.  Note: please add a colon in front of port as in :8000
+set two environmental variables - like this.  
 export MONGO_HOST=localhost
-export QRROUTER_PORT=:8004
+export QRROUTER_PORT=8004
 
 Dependencies/Building:
 godeps is not used for package management and versioning -
