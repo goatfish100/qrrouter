@@ -37,6 +37,6 @@ var MongoDBDatabase = "resources"
 func main() {
 
 	router := NewRouter()
-	var portnumber = os.Getenv("QRROUTER_PORT")
+	var portnumber = ":"+os.Getenv("QRROUTER_PORT")
 	log.Fatal(http.ListenAndServe(portnumber, router))
 }
