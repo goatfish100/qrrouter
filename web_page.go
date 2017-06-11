@@ -6,6 +6,7 @@ import (
 
 	"os"
 
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/sessions"
 	"gopkg.in/mgo.v2"
 )
@@ -37,6 +38,10 @@ var MongoDBDatabase = "resources"
 func main() {
 
 	router := NewRouter()
-	var portnumber = ":"+os.Getenv("QRROUTER_PORT")
-	log.Fatal(http.ListenAndServe(portnumber, router))
+	var portnumber = ":" + os.Getenv("QRROUTER_PORT")
+
+	// Set up CORS
+	corsObj := handlers.AllowedOrigins([]string{"*"})
+	// and use combined logging handler as well
+	log.Fatal(http.ListenAndServe(portnumber, handlers.CombinedLoggingHandler(os.Stdout, handlers.CORS(corsObj)(router))))
 }
