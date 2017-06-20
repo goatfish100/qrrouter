@@ -1,4 +1,13 @@
 # README #
+QRRouter is a microservice application for taking URL's and
+routing or proxying the request accordingly.  Written in GoLang,
+it uses Gorilla/MUX for page routing and Mailgun's Vulcand to
+reverse proxy traffic through it's URL - or redirect depending upon
+how the URL resource is configured.
+
+https://github.com/vulcand/vulcand
+
+
 QR HELPER Application - is a collection of Micro Services
 QRWEBAPI is the Web Api portion
 QRRouter is the router directing traffic to QR Resources
