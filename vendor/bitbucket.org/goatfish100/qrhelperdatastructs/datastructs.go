@@ -24,15 +24,19 @@ type Orgs []Org
 
 type Users []User
 type Resource struct {
-	ID          string `json:"id" bson:"_id,omitempty"`
-	Uuid        string `json:"uuid"`
-	OrgId       string `json:"orgid" bson:"orgid,omitempty"`
-	Description string `json:"Description"`
-	Name        string `json:"Name"`
-	Protected   string `json:"Protected"`
-	Action      string `json:"Action"`
-	Address     string `json:"Address"`
+	//ID          string `json:"id" bson:"_id,omitempty"`
+	ID          bson.ObjectId `json:"id"        bson:"_id,omitempty"`
+	Uuid        string        `json:"uuid"`
+	OrgId       string        `json:"orgid" bson:"orgid,omitempty"`
+	Description string        `json:"Description"`
+	Email       string        `json:"Email"`
+	Name        string        `json:"Name"`
+	Protected   string        `json:"Protected"`
+	Action      string        `json:"Action"`
+	Address     string        `json:"Address"`
 }
+
+type Resources []Resource
 
 type JSONSuccess struct {
 	Success string `json:"success"`

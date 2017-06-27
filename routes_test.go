@@ -79,7 +79,7 @@ func TestUUIDRoute2(t *testing.T) {
 	handler.ServeHTTP(rr, req)
 	//
 	if rr.Code == 404 {
-		t.Log("asdf")
+		t.Log("TestUUIDRoute2 Fail")
 		t.Fail()
 	}
 	t.Log("testUUIDRoute code ", rr.Code)
