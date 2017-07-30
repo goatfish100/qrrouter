@@ -26,7 +26,7 @@ QRRouter is the router directing traffic to QR Resources
 * brew install golang
 * create folder gowork under home folder
 * add line export GOPATH=/Users/jamesl/gowork to .bash_profile
-* make folder src/bitbucket.org in go path
+* make folder src/gitlab.com in go path
 * cd into src/bitbucket.org
 * git clone the source into the folder git
 * git clone git@bitbucket.org:goatfish100/gorouter.git

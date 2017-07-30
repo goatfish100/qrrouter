@@ -5,7 +5,7 @@ import (
 
 	"gopkg.in/mgo.v2/bson"
 
-	"bitbucket.org/goatfish100/qrhelperdatastructs"
+	"gitlab.com/qrhelper/qrhelperdatastructs"
 )
 
 //FetchResource - fetch resource
