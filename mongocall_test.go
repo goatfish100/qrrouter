@@ -3,7 +3,7 @@ package main
 import (
 	"testing"
 
-	datastructs "bitbucket.org/goatfish100/qrhelperdatastructs"
+	datastructs "gitlab.com/qrhelper/qrhelperdatastructs"
 )
 
 func TestFetchResource(t *testing.T) {

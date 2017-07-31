@@ -1,11 +1,11 @@
 {
-	"ImportPath": "bitbucket.org/goatfish100/qrrouter",
+	"ImportPath": "gitlab.com/qrhelper/qrrouter",
 	"GoVersion": "go1.8",
 	"GodepVersion": "v78",
 	"Deps": [
 		{
-			"ImportPath": "bitbucket.org/goatfish100/qrhelperdatastructs",
-			"Rev": "7d573725f17eb2677d4d24fb44f2603152687a7c"
+			"ImportPath": "gitlab.com/qrhelper/qrhelperdatastructs",
+			"Rev": "a87ea00b6a6d40f152bf525192e92fbdfeb91fc7"
 		},
 		{
 			"ImportPath": "github.com/Sirupsen/logrus",

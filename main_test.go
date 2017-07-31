@@ -8,7 +8,7 @@ import (
 
 	"io/ioutil"
 
-	"bitbucket.org/goatfish100/qrhelperdatastructs"
+	"gitlab.com/qrhelper/qrhelperdatastructs"
 
 	"gopkg.in/mgo.v2/dbtest"
 )
