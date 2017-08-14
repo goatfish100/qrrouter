@@ -5,7 +5,7 @@
 	"Deps": [
 		{
 			"ImportPath": "gitlab.com/qrhelper/qrhelperdatastructs",
-			"Rev": "ba5dfe3d87a1cb6bea9dd1d362f2d7407d8756ea"
+			"Rev": "d6fceefb356f82ea098faee3fa97621bdea53b7e"
 		},
 		{
 			"ImportPath": "github.com/Sirupsen/logrus",
