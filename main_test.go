@@ -8,19 +8,19 @@ import (
 
 	"io/ioutil"
 
-	"bitbucket.org/goatfish100/qrhelperdatastructs"
+	"gitlab.com/qrhelper/qrhelperdatastructs"
 
 	"gopkg.in/mgo.v2/dbtest"
 )
 
 var ()
 
-var resource1 = datastructs.Resource{Uuid: "333c1dd2-d454-11e6-a110-b34e9f2c654a", Description: "yahoo", Protected: "false", Action: "forward", Address: "https://www.yahoo.com"}
-var resource2 = datastructs.Resource{Uuid: "444edd7c-d454-11e6-92b9-374c2fc3d623", Description: "yahoo", Protected: "false", Action: "forward", Address: "https://www.google.com"}
-var resource3 = datastructs.Resource{Uuid: "444edd7c-d454-11e6-92b9-374c2fc3d624", Description: "redirect", Protected: "false", Action: "redirect", Address: "/test"}
-var resource4 = datastructs.Resource{Uuid: "444edd7c-d454-11e6-92b9-374c2fc3d625", Description: "forward", Protected: "false", Action: "forward", Address: "/test"}
-var resource5 = datastructs.Resource{Uuid: "444edd7c-d454-11e6-92b9-374c2fc3d626", Description: "S3 redirect", Protected: "false", Action: "s3serve", Address: "/s3redirect"}
-var resource6 = datastructs.Resource{Uuid: "444edd7c-d454-11e6-92b9-374c2fc3d627", Description: "S3 forward", Protected: "false", Action: "s3redirect", Address: "/s3forward"}
+var resource1 = datastructs.Resource{Uuid: "333c1dd2-d454-11e6-a110-b34e9f2c654a", Description: "yahoo", Action: "forward", Address: "https://www.yahoo.com"}
+var resource2 = datastructs.Resource{Uuid: "444edd7c-d454-11e6-92b9-374c2fc3d623", Description: "yahoo", Action: "forward", Address: "https://www.google.com"}
+var resource3 = datastructs.Resource{Uuid: "444edd7c-d454-11e6-92b9-374c2fc3d624", Description: "redirect", Action: "redirect", Address: "/test"}
+var resource4 = datastructs.Resource{Uuid: "444edd7c-d454-11e6-92b9-374c2fc3d625", Description: "forward", Action: "forward", Address: "/test"}
+var resource5 = datastructs.Resource{Uuid: "444edd7c-d454-11e6-92b9-374c2fc3d626", Description: "S3 redirect", Action: "s3serve", Address: "/s3redirect"}
+var resource6 = datastructs.Resource{Uuid: "444edd7c-d454-11e6-92b9-374c2fc3d627", Description: "S3 forward", Action: "s3redirect", Address: "/s3forward"}
 
 var Server dbtest.DBServer
 
