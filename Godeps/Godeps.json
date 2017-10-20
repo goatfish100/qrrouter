@@ -5,12 +5,12 @@
 	"Deps": [
 		{
 			"ImportPath": "gitlab.com/qrhelper/qrhelperdatastructs",
-			"Rev": "ba5dfe3d87a1cb6bea9dd1d362f2d7407d8756ea"
+			"Rev": "1e3e558ee8ab6c9549e36cff501d064e6fd76325"
 		},
 		{
 			"ImportPath": "github.com/Sirupsen/logrus",
-			"Comment": "v0.11.0-25-g881bee4",
-			"Rev": "881bee4e20a5d11a6a88a5667c6f292072ac1963"
+			"Comment": "v1.0.3-11-g89742ae",
+			"Rev": "89742aefa4b206dcf400792f3bd35b542998eb3b"
 		},
 		{
 			"ImportPath": "github.com/gorilla/context",
@@ -19,8 +19,8 @@
 		},
 		{
 			"ImportPath": "github.com/gorilla/handlers",
-			"Comment": "v1.2-4-g13d7309",
-			"Rev": "13d73096a474cac93275c679c7b8a2dc17ddba82"
+			"Comment": "v1.2.1-1-ga4d79d4",
+			"Rev": "a4d79d4487c2430a17d9dc8a1f74d1a6ed6908ca"
 		},
 		{
 			"ImportPath": "github.com/gorilla/mux",
@@ -39,44 +39,44 @@
 		},
 		{
 			"ImportPath": "github.com/minio/minio-go",
-			"Comment": "v2.0.4-13-g29b0515",
-			"Rev": "29b05151452ac74ee9b46c93c2200f8b57331e24"
+			"Comment": "v3.0.1-5-g8cf0454",
+			"Rev": "8cf0454aea55db44675ec9c6bfc6ebaaa819dfa7"
 		},
 		{
 			"ImportPath": "github.com/minio/minio-go/pkg/policy",
-			"Comment": "v2.0.4-13-g29b0515",
-			"Rev": "29b05151452ac74ee9b46c93c2200f8b57331e24"
+			"Comment": "v3.0.1-5-g8cf0454",
+			"Rev": "8cf0454aea55db44675ec9c6bfc6ebaaa819dfa7"
 		},
 		{
 			"ImportPath": "github.com/minio/minio-go/pkg/s3signer",
-			"Comment": "v2.0.4-13-g29b0515",
-			"Rev": "29b05151452ac74ee9b46c93c2200f8b57331e24"
+			"Comment": "v3.0.1-5-g8cf0454",
+			"Rev": "8cf0454aea55db44675ec9c6bfc6ebaaa819dfa7"
 		},
 		{
 			"ImportPath": "github.com/minio/minio-go/pkg/s3utils",
-			"Comment": "v2.0.4-13-g29b0515",
-			"Rev": "29b05151452ac74ee9b46c93c2200f8b57331e24"
+			"Comment": "v3.0.1-5-g8cf0454",
+			"Rev": "8cf0454aea55db44675ec9c6bfc6ebaaa819dfa7"
 		},
 		{
 			"ImportPath": "github.com/minio/minio-go/pkg/set",
-			"Comment": "v2.0.4-13-g29b0515",
-			"Rev": "29b05151452ac74ee9b46c93c2200f8b57331e24"
+			"Comment": "v3.0.1-5-g8cf0454",
+			"Rev": "8cf0454aea55db44675ec9c6bfc6ebaaa819dfa7"
 		},
 		{
 			"ImportPath": "github.com/vulcand/oxy/forward",
-			"Rev": "9d07313adea3bb9c7817ea887df6ac79648675f9"
+			"Rev": "d04b87a836cff74fd8e9d2ae8cf4cda09910d000"
 		},
 		{
 			"ImportPath": "github.com/vulcand/oxy/testutils",
-			"Rev": "9d07313adea3bb9c7817ea887df6ac79648675f9"
+			"Rev": "d04b87a836cff74fd8e9d2ae8cf4cda09910d000"
 		},
 		{
 			"ImportPath": "github.com/vulcand/oxy/utils",
-			"Rev": "9d07313adea3bb9c7817ea887df6ac79648675f9"
+			"Rev": "d04b87a836cff74fd8e9d2ae8cf4cda09910d000"
 		},
 		{
 			"ImportPath": "golang.org/x/sys/unix",
-			"Rev": "90796e5a05ce440b41c768bd9af257005e470461"
+			"Rev": "8dbc5d05d6edcc104950cc299a1ce6641235bc86"
 		},
 		{
 			"ImportPath": "gopkg.in/mgo.v2",
@@ -111,6 +111,38 @@
 		{
 			"ImportPath": "gopkg.in/tomb.v2",
 			"Rev": "d5d1b5820637886def9eef33e03a27a9f166942c"
+		},
+		{
+			"ImportPath": "golang.org/x/crypto/ssh/terminal",
+			"Rev": "541b9d50ad47e36efd8fb423e938e59ff1691f68"
+		},
+		{
+			"ImportPath": "golang.org/x/sys/windows",
+			"Rev": "8dbc5d05d6edcc104950cc299a1ce6641235bc86"
+		},
+		{
+			"ImportPath": "github.com/minio/minio-go/pkg/credentials",
+			"Comment": "v3.0.1-5-g8cf0454",
+			"Rev": "8cf0454aea55db44675ec9c6bfc6ebaaa819dfa7"
+		},
+		{
+			"ImportPath": "github.com/minio/minio-go/pkg/encrypt",
+			"Comment": "v3.0.1-5-g8cf0454",
+			"Rev": "8cf0454aea55db44675ec9c6bfc6ebaaa819dfa7"
+		},
+		{
+			"ImportPath": "github.com/go-ini/ini",
+			"Comment": "v1.30.0",
+			"Rev": "5b3e00af70a9484542169a976dcab8d03e601a17"
+		},
+		{
+			"ImportPath": "github.com/minio/go-homedir",
+			"Rev": "21304a94172ae3a09dee2cd86a12fb6f842138c7"
+		},
+		{
+			"ImportPath": "github.com/sirupsen/logrus",
+			"Comment": "v1.0.3-11-g89742ae",
+			"Rev": "89742aefa4b206dcf400792f3bd35b542998eb3b"
 		}
 	]
 }

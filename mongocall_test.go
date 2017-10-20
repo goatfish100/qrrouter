@@ -22,7 +22,6 @@ func testResource(r1 datastructs.Resource, r2 datastructs.Resource) bool {
 	if r1.Action == r2.Action &&
 		r1.Address == r2.Address &&
 		r1.Description == r2.Description &&
-		r1.Protected == r2.Protected &&
 		r1.Uuid == r2.Uuid {
 		resflag = true
 	} else {
