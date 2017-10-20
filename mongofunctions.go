@@ -26,6 +26,14 @@ func FetchResource(resourceid string) datastructs.Resource {
 		log.Print(err)
 		//panic(err)
 	}
+
+	// // Update
+	colQuerier := bson.M{"uuid": resourceid}
+	change := bson.M{"$inc": bson.M{"accesscount": 1}}
+	err = c.Update(colQuerier, change)
+	if err != nil {
+		panic(err)
+	}
 	log.Println("leaving FetchResource")
 	return result
 }
