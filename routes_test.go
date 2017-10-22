@@ -63,7 +63,6 @@ func TestUUIDRoute1(t *testing.T) {
 	log.Println("status is ", resp.StatusCode)
 
 }
-
 func TestUUIDRoute2(t *testing.T) {
 	//r := mux.NewRouter()
 
@@ -76,96 +75,95 @@ func TestUUIDRoute2(t *testing.T) {
 	}
 	rr := httptest.NewRecorder()
 	handler := http.HandlerFunc(UUIDHandler)
-	//
+
 	handler.ServeHTTP(rr, req)
 	//
-	// if rr.Code == 404 {
-	// 	t.Log("TestUUIDRoute2 Fail")
-	// 	t.Fail()
-	// }
-	// t.Log("testUUIDRoute code ", rr.Code)
-	// t.Log("testUUIDRoute code ", rr.Code)
-	// //fmt.Println(rr.Result())
-	// t.Log("TestUUIDRoute2", string(rr.Body.Bytes()))
+	if rr.Code == 404 {
+		t.Log("TestUUIDRoute2 Fail")
+		t.Fail()
+	}
+	t.Log("testUUIDRoute code ", rr.Code)
+	t.Log("testUUIDRoute code ", rr.Code)
+	//fmt.Println(rr.Result())
+	t.Log("TestUUIDRoute2", string(rr.Body.Bytes()))
 
 }
 
-//
-// func TestUUIDRoute5(t *testing.T) {
-// 	//r := mux.NewRouter()
-//
-// 	req, err2 := http.NewRequest("GET", "/uuid/444edd7c-d454-11e6-92b9-374c2fc3d626", nil)
-//
-// 	context.Set(req, "key", "444edd7c-d454-11e6-92b9-374c2fc3d626")
-//
-// 	if err2 != nil {
-// 		t.Fatal(err)
-// 	}
-// 	rr := httptest.NewRecorder()
-// 	handler := http.HandlerFunc(UUIDHandler)
-//
-// 	handler.ServeHTTP(rr, req)
-// 	//
-// 	if rr.Code == 404 {
-// 		t.Log("TestUUIDRoute5 Fail")
-// 		t.Fail()
-// 	}
-// 	t.Log("testUUIDRoute code ", rr.Code)
-// 	t.Log("testUUIDRoute code ", rr.Code)
-// 	//fmt.Println(rr.Result())
-// 	t.Log("TestUUIDRoute5", string(rr.Body.Bytes()))
-//
-// }
-//
-// func TestUUIDRoute6(t *testing.T) {
-// 	//r := mux.NewRouter()
-//
-// 	req, err2 := http.NewRequest("GET", "/uuid/444edd7c-d454-11e6-92b9-374c2fc3d627", nil)
-//
-// 	context.Set(req, "key", "444edd7c-d454-11e6-92b9-374c2fc3d627")
-//
-// 	if err2 != nil {
-// 		t.Fatal(err)
-// 	}
-// 	rr := httptest.NewRecorder()
-// 	handler := http.HandlerFunc(UUIDHandler)
-//
-// 	handler.ServeHTTP(rr, req)
-// 	//
-// 	if rr.Code == 404 {
-// 		t.Log("TestUUIDRoute5 Fail")
-// 		t.Fail()
-// 	}
-// 	t.Log("testUUIDRoute code ", rr.Code)
-// 	t.Log("testUUIDRoute code ", rr.Code)
-// 	//fmt.Println(rr.Result())
-// 	t.Log("TestUUIDRoute5", string(rr.Body.Bytes()))
-//
-// }
-//
-// func TestUUIDRoute6FailTest(t *testing.T) {
-// 	//r := mux.NewRouter()
-//
-// 	//choose one item that does not exist
-// 	req, err2 := http.NewRequest("GET", "/uuid/44433333-d454-11e6-92b9-374c2fc3DDDD", nil)
-//
-// 	context.Set(req, "key", "444edd7c-d454-11e6-92b9-374c2fc3d627")
-//
-// 	if err2 != nil {
-// 		t.Fatal(err)
-// 	}
-// 	rr := httptest.NewRecorder()
-// 	handler := http.HandlerFunc(UUIDHandler)
-//
-// 	handler.ServeHTTP(rr, req)
-// 	//
-// 	if rr.Code == 404 {
-// 		t.Log("TestUUIDRoute5 Fail")
-// 		t.Fail()
-// 	}
-// 	t.Log("testUUIDRoute code ", rr.Code)
-// 	t.Log("testUUIDRoute code ", rr.Code)
-// 	//fmt.Println(rr.Result())
-// 	t.Log("TestUUIDRoute5", string(rr.Body.Bytes()))
-//
-// }
+func TestUUIDRoute5(t *testing.T) {
+	//r := mux.NewRouter()
+
+	req, err2 := http.NewRequest("GET", "/uuid/444edd7c-d454-11e6-92b9-374c2fc3d626", nil)
+
+	context.Set(req, "key", "444edd7c-d454-11e6-92b9-374c2fc3d626")
+
+	if err2 != nil {
+		t.Fatal(err)
+	}
+	rr := httptest.NewRecorder()
+	handler := http.HandlerFunc(UUIDHandler)
+
+	handler.ServeHTTP(rr, req)
+	//
+	if rr.Code == 404 {
+		t.Log("TestUUIDRoute5 Fail")
+		t.Fail()
+	}
+	t.Log("testUUIDRoute code ", rr.Code)
+	t.Log("testUUIDRoute code ", rr.Code)
+	//fmt.Println(rr.Result())
+	t.Log("TestUUIDRoute5", string(rr.Body.Bytes()))
+
+}
+
+func TestUUIDRoute6(t *testing.T) {
+	//r := mux.NewRouter()
+
+	req, err2 := http.NewRequest("GET", "/uuid/444edd7c-d454-11e6-92b9-374c2fc3d627", nil)
+
+	context.Set(req, "key", "444edd7c-d454-11e6-92b9-374c2fc3d627")
+
+	if err2 != nil {
+		t.Fatal(err)
+	}
+	rr := httptest.NewRecorder()
+	handler := http.HandlerFunc(UUIDHandler)
+
+	handler.ServeHTTP(rr, req)
+	//
+	if rr.Code == 404 {
+		t.Log("TestUUIDRoute5 Fail")
+		t.Fail()
+	}
+	t.Log("testUUIDRoute code ", rr.Code)
+	t.Log("testUUIDRoute code ", rr.Code)
+	//fmt.Println(rr.Result())
+	t.Log("TestUUIDRoute5", string(rr.Body.Bytes()))
+
+}
+
+func TestUUIDRoute6FailTest(t *testing.T) {
+	//r := mux.NewRouter()
+
+	//choose one item that does not exist
+	req, err2 := http.NewRequest("GET", "/uuid/44433333-d454-11e6-92b9-374c2fc3DDDD", nil)
+
+	context.Set(req, "key", "444edd7c-d454-11e6-92b9-374c2fc3d627")
+
+	if err2 != nil {
+		t.Fatal(err)
+	}
+	rr := httptest.NewRecorder()
+	handler := http.HandlerFunc(UUIDHandler)
+
+	handler.ServeHTTP(rr, req)
+	//
+	if rr.Code == 404 {
+		t.Log("TestUUIDRoute5 Fail")
+		t.Fail()
+	}
+	t.Log("testUUIDRoute code ", rr.Code)
+	t.Log("testUUIDRoute code ", rr.Code)
+	//fmt.Println(rr.Result())
+	t.Log("TestUUIDRoute5", string(rr.Body.Bytes()))
+
+}
