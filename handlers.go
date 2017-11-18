@@ -27,8 +27,8 @@ func NewRouter() *mux.Router {
 	http.Handle("/", r)
 	r.NotFoundHandler = http.HandlerFunc(HomeHandler)
 
-	//r.PathPrefix("/jlsone/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("/home/jamesl/gowork/src/bitbucket.org/gorillaweb/static"))))
-	r.PathPrefix("/jlsone/").Handler(http.FileServer(http.Dir(http.Dir("./static"))))
+	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
+	//r.PathPrefix("/jlsone/").Handler(http.FileServer(http.Dir(http.Dir("./static"))))
 
 	return r
 }
@@ -191,8 +191,7 @@ func UUIDHandler(w http.ResponseWriter, r *http.Request) {
 	} else {
 		//TODO - Forward/send to real not found resource
 		log.Println("UUIDHandler - no resource found for ", vars["key"])
-
-		//http.Error("No QR Helper found!\n", "QR resource not found", http.StatusNotFound)
-		w.Write([]byte("No QR Helper found!\n"))
+		// Serve the helper resource not found page
+		http.ServeFile(w, r, "./static/qrnotfound.html")
 	}
 }
