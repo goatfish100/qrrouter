@@ -4,11 +4,14 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/joho/godotenv"
+
 	"os"
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/sessions"
-	"gopkg.in/mgo.v2"
+
+	mgo "gopkg.in/mgo.v2"
 )
 
 //MongoHost - the mongo host name
@@ -35,11 +38,18 @@ var MgoSession, err = mgo.Dial(MongoHost)
 //MongoDBDatabase - mongo database name
 var MongoDBDatabase = "resources"
 
+func init() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+}
+
 func main() {
 
 	router := NewRouter()
 	var portnumber = ":" + os.Getenv("QRROUTER_PORT")
-
+	log.Println("Port number is ", portnumber)
 	// Set up CORS
 	corsObj := handlers.AllowedOrigins([]string{"*"})
 	// and use combined logging handler as well
