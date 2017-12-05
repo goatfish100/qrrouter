@@ -52,10 +52,18 @@ RUNNING:
 qrrouter - can be run two ways - in Docker and orchestrated with docker-compose or with go with Mongo running on
 locally or in Docker.
 
-Running Locally
-set two environmental variables - like this.  
-export MONGO_HOST=localhost
-export QRROUTER_PORT=8004
+Running Locally - please include a .env file with the following
+settings configured.  This gets picked up on start up of app
+AWS_BUCKET=XXXX
+AWS_PASSPHRASE=XXXX
+AWS_KEY=xxxx
+AWS_URL=s3.amazonaws.com
+COOKIE_SECRET=whateveryouwant
+MONGO_HOST=localhost
+QRROUTER_PORT=8010
+
+
+
 
 Dependencies/Building:
 godeps is not used for package management and versioning -
