@@ -84,6 +84,8 @@ func TestGetUUID2(t *testing.T) {
 
 }
 
+//TestGetUUID3 - TODO - set up minio library
+//to mock
 // func TestGetUUID3(t *testing.T) {
 // 	t.Parallel()
 // 	t.Log("TestGetResource Test")
@@ -99,6 +101,9 @@ func TestGetUUID2(t *testing.T) {
 // 	t.Log("the return string is bbxx", string(w.Body.Bytes()))
 //
 // }
+
+//TestGetUUID4 - TODO - set up minio library
+//to mock
 // func TestGetUUID4(t *testing.T) {
 // 	t.Parallel()
 // 	t.Log("TestGetResource Test")
