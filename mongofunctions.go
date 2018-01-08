@@ -10,12 +10,11 @@ import (
 
 //FetchResource - fetch resource
 func FetchResource(resourceid string) datastructs.Resource {
-
-
+	println("inside fetchresource resourceid", resourceid)
 	c := MgoSession.DB(MongoDBDatabase).C("res")
 	result := datastructs.Resource{}
 	err = c.Find(bson.M{"uuid": resourceid}).One(&result)
-
+	println("fetched resource", result.Address)
 	if err != nil {
 		log.Print(err)
 		//panic(err)

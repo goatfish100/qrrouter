@@ -20,7 +20,6 @@ import (
 func NewRouter() *mux.Router {
 
 	r := mux.NewRouter()
-	//r.HandleFunc(`/{[a-zA-Z0-9=\-\/\//]+	}`, HomeHandler)
 
 	r.HandleFunc("/uuid/{key}", UUIDHandler)
 	r.HandleFunc("/test", TestHandler)
@@ -28,8 +27,6 @@ func NewRouter() *mux.Router {
 	r.NotFoundHandler = http.HandlerFunc(HomeHandler)
 
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
-	//r.PathPrefix("/jlsone/").Handler(http.FileServer(http.Dir(http.Dir("./static"))))
-
 	return r
 }
 
@@ -92,7 +89,6 @@ func AmazonS3Handler(w http.ResponseWriter, r *http.Request, resource string, fi
 
 	w.Header().Set("Content-Disposition: inline; filename=", filename)
 	w.Header().Set("Content-Type", "pdf")
-	//Content-Disposition: inline; filename="myfile.txt"
 
 	b, err := ioutil.ReadAll(reader)
 
@@ -161,6 +157,7 @@ func UUIDHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	log.Println("uuid keys", vars["key"])
 	result := FetchResource(vars["key"])
+	log.Println("Address is ", result.Address)
 	if result.Address != "" {
 
 		log.Println("the address is " + result.Address)
