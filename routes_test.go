@@ -8,29 +8,13 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/stretchr/testify/assert"
-	"github.com/minio/minio-go"
 )
 
 var (
 	server *httptest.Server
-
 )
 
 func init() {
-
-}
-
-func s3connect2(AwsBucket string, resource string) (*minio.Object, error) {
-	s3Client, err := minio.New(AwsURL, AwsKey, AwsPassPhrase, true)
-
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
-
-	reader, err := s3Client.GetObject(AwsBucket, resource)
-
-	defer reader.Close()
-	return reader, err
 
 }
 
@@ -70,7 +54,12 @@ func InvokeHandler(handler http.Handler, routePath string,
 }
 func TestGetUUID1(t *testing.T) {
 	t.Parallel()
-	t.Log("TestGetResource Test")
+	t.Log("TestGetUUID Test")
+
+	varRedirect = func(w http.ResponseWriter, r *http.Request, resource string, status int) {
+		t.Log("TestGetUUID1 redirect handler")
+		w.Write([]byte("Gorilla!\n" ))
+	}
 
 	path := "/uuid/444edd7c-d454-11e6-92b9-374c2fc3d623"
 	t.Log("TestGetResource the path is ", path)
@@ -78,15 +67,21 @@ func TestGetUUID1(t *testing.T) {
 	w := httptest.NewRecorder()
 
 	InvokeHandler(http.HandlerFunc(UUIDHandler), "/uuid/{key}", w, r)
+	t.Log("TestGetUUID1 code", w.Code)
 	assert.Equal(t, http.StatusOK, w.Code)
 
-	t.Log("the return string is bbxx", string(w.Body.Bytes()))
+	t.Log("TestGetUUID1 the return string is bbxx", string(w.Body.Bytes()))
 
 }
 
 func TestGetUUID2(t *testing.T) {
 	t.Parallel()
 	t.Log("TestGetResource Test")
+
+	varPROXYHandler = func(w http.ResponseWriter, r *http.Request, resource string) {
+		t.Log("TestGetUUID1 redirect handler")
+		w.Write([]byte("Gorilla!\n" ))
+	}
 
 	path := "/uuid/444edd7c-d454-11e6-92b9-374c2fc3d624"
 	t.Log("TestGetResource the path is ", path)
@@ -95,7 +90,7 @@ func TestGetUUID2(t *testing.T) {
 
 	InvokeHandler(http.HandlerFunc(UUIDHandler), "/uuid/{key}", w, r)
 	t.Log("TestGetUUID2 code", w.Code)
-	//assert.Equal(t, http.StatusFound, w.Code)
+	assert.Equal(t, http.StatusOK, w.Code)
 	//assert.Equal(t, http.StatusFound, w.Code)
 
 	t.Log("the return string is bbxx", string(w.Body.Bytes()))
@@ -122,55 +117,46 @@ func TestGetUUID2(t *testing.T) {
 
 //TestGetUUID4 - TODO - set up minio library
 //to mock
- func TestGetUUID4(t *testing.T) {
- 	t.Parallel()
- 	t.Log("TestGetResource Test")
+func TestGetUUID4(t *testing.T) {
+	t.Parallel()
+	t.Log("TestGetUUID4 S3 redirect Test")
 
-	 varAmazonS3Handler = func(w http.ResponseWriter, r *http.Request, resource string, filename string) {
-		 t.Log("TestGetUUID4 inside test handler")
-		 w.Write([]byte("Gorilla!\n"+resource+filename))
-	 }
-
- 	path := "/uuid/444edd7c-d454-11e6-92b9-374c2fc3d627"
- 	t.Log("TestGetResource the path is ", path)
- 	r, _ := http.NewRequest("GET", path, nil)
- 	w := httptest.NewRecorder()
-
- 	InvokeHandler(http.HandlerFunc(UUIDHandler), "/uuid/{key}", w, r)
- 	//	assert.Equal(t, http.StatusFound, w.Code)
-
- 	t.Log("the return string is bbxx", string(w.Body.Bytes()))
-
- }
-func TestUUIDRoute5(t *testing.T) {
-
-
-	varAmazonS3URIHandler  = func(w http.ResponseWriter, r *http.Request, resource string, filename string) {
-	 t.Log("TestGetUUID5 inside test handler")
-	 w.Write([]byte("Gorilla!\n"+resource+filename))
+	varAmazonS3Handler = func(w http.ResponseWriter, r *http.Request, resource string, filename string) {
+		t.Log("AmazonS3Handler inside test handler")
+		w.Write([]byte("Gorilla!\n" + resource + filename))
 	}
 
-	req, err2 := http.NewRequest("GET", "/uuid/444edd7c-d454-11e6-92b9-374c2fc3d626", nil)
+	path := "/uuid/444edd7c-d454-11e6-92b9-374c2fc3d626"
+	t.Log("TestGetResource the path is ", path)
+	r, _ := http.NewRequest("GET", path, nil)
+	w := httptest.NewRecorder()
 
+	InvokeHandler(http.HandlerFunc(UUIDHandler), "/uuid/{key}", w, r)
+	//	assert.Equal(t, http.StatusFound, w.Code)
 
-	if err2 != nil {
-		t.Fatal(err)
-	}
-	rr := httptest.NewRecorder()
-	handler := http.HandlerFunc(UUIDHandler)
-
-	handler.ServeHTTP(rr, req)
-	//
-	if rr.Code == 404 {
-		t.Log("TestUUIDRoute5 Fail")
-		t.Fail()
-	}
-	t.Log("testUUIDRoute5 code ", rr.Code)
-	t.Log("testUUIDRoute5 code ", rr.Code)
-	//fmt.Println(rr.Result())
-	t.Log("TestUUIDRoute5", string(rr.Body.Bytes()))
+	t.Log("the return string is bbxx", string(w.Body.Bytes()))
 
 }
+func TestUUIDRoute5(t *testing.T) {
+
+	varAmazonS3URIHandler = func(w http.ResponseWriter, r *http.Request, resource string, filename string) {
+		t.Log("TestGetUUID5 inside test handler")
+		w.Write([]byte("Gorilla!\n" + resource + filename))
+	}
+
+	path := "/uuid/444edd7c-d454-11e6-92b9-374c2fc3d627"
+	t.Log("TestGetResource the path is ", path)
+	r, _ := http.NewRequest("GET", path, nil)
+	w := httptest.NewRecorder()
+
+	InvokeHandler(http.HandlerFunc(UUIDHandler), "/uuid/{key}", w, r)
+	//	assert.Equal(t, http.StatusFound, w.Code)
+
+	t.Log("the return string is bbxx", string(w.Body.Bytes()))
+
+
+}
+
 // func TestUUIDRoute2(t *testing.T) {
 // 	//r := mux.NewRouter()
 //
@@ -253,31 +239,29 @@ func TestUUIDRoute5(t *testing.T) {
 //
 // }
 //
- func TestUUIDRoute6FailTest(t *testing.T) {
- 	//r := mux.NewRouter()
+func TestUUIDRoute6FailTest(t *testing.T) {
+	//r := mux.NewRouter()
 
- 	//choose one item that does not exist
- 	req, err2 := http.NewRequest("GET", "/uuid/doesnotexist", nil)
+	//choose one item that does not exist
+	req, err2 := http.NewRequest("GET", "/uuid/doesnotexist", nil)
 
+	if err2 != nil {
+		t.Fatal(err)
+	}
+	rr := httptest.NewRecorder()
+	handler := http.HandlerFunc(UUIDHandler)
 
+	handler.ServeHTTP(rr, req)
+	//
+	if rr.Code == 404 {
+		t.Log("TestUUIDRoute6FailTest Fail")
+		t.Fail()
+	}
+	t.Log("TestUUIDRoute6FailTest code ", rr.Code)
+	t.Log("TestUUIDRoute6FailTest code ", rr.Code)
+	//fmt.Println(rr.Result())
+	//result := string(rr.Body.Bytes())
 
- 	if err2 != nil {
- 		t.Fatal(err)
- 	}
- 	rr := httptest.NewRecorder()
- 	handler := http.HandlerFunc(UUIDHandler)
+	t.Log("TestUUIDRoute6FailTest", string(rr.Body.Bytes()))
 
- 	handler.ServeHTTP(rr, req)
- 	//
- 	if rr.Code == 404 {
- 		t.Log("TestUUIDRoute6FailTest Fail")
- 		t.Fail()
- 	}
- 	t.Log("TestUUIDRoute6FailTest code ", rr.Code)
- 	t.Log("TestUUIDRoute6FailTest code ", rr.Code)
- 	//fmt.Println(rr.Result())
- 	//result := string(rr.Body.Bytes())
-
- 	t.Log("TestUUIDRoute6FailTest", string(rr.Body.Bytes()))
-
- }
+}

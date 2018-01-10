@@ -11,7 +11,7 @@ import (
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/sessions"
 
-	mgo "gopkg.in/mgo.v2"
+	"gopkg.in/mgo.v2"
 )
 
 //MongoHost - the mongo host name

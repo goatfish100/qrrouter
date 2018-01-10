@@ -13,11 +13,10 @@ import (
 	"gopkg.in/mgo.v2/dbtest"
 )
 
-var ()
 var invokeCount int
 
-var resource1 = datastructs.Resource{Uuid: "333c1dd2-d454-11e6-a110-b34e9f2c654a", Description: "yahoo", Action: "forward", Address: "https://www.yahoo.com", AccessCount: 0}
-var resource2 = datastructs.Resource{Uuid: "444edd7c-d454-11e6-92b9-374c2fc3d623", Description: "yahoo", Action: "forward", Address: "https://www.google.com", AccessCount: 0}
+var resource1 = datastructs.Resource{Uuid: "333c1dd2-d454-11e6-a110-b34e9f2c654a", Description: "yahoo", Action: "redirect", Address: "https://www.yahoo.com", AccessCount: 0}
+var resource2 = datastructs.Resource{Uuid: "444edd7c-d454-11e6-92b9-374c2fc3d623", Description: "yahoo", Action: "redirect", Address: "https://www.google.com", AccessCount: 0}
 var resource3 = datastructs.Resource{Uuid: "444edd7c-d454-11e6-92b9-374c2fc3d624", Description: "redirect", Action: "proxy", Address: "/test", AccessCount: 0}
 var resource4 = datastructs.Resource{Uuid: "444edd7c-d454-11e6-92b9-374c2fc3d625", Description: "forward", Action: "forward", Address: "/test", AccessCount: 0}
 var resource5 = datastructs.Resource{Uuid: "444edd7c-d454-11e6-92b9-374c2fc3d626", Description: "S3 redirect", Action: "s3serve", Address: "/s3redirect", AccessCount: 0}
