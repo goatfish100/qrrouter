@@ -1,5 +1,5 @@
 package main
-
+//go:generate mockgen -source=src/github.com/minio/minio-go/api.go -package=main -destination=cache_mock.go
 import (
 	"fmt"
 	"log"
@@ -28,6 +28,7 @@ func s3connect(AwsBucket string, resource string) (*minio.Object, error) {
 
 }
 
+var vars3connect = s3connect
 //AmazonS3Handler proxy request home handler
 func AmazonS3Handler(w http.ResponseWriter, r *http.Request, resource string, filename string) {
 	fmt.Println("----AmazonS3Handler")
@@ -52,7 +53,7 @@ func AmazonS3Handler(w http.ResponseWriter, r *http.Request, resource string, fi
 	//	panic(err)
 	//}
 	//
-	reader, err := s3connect(AwsBucket, resource)
+	reader, err := vars3connect(AwsBucket, resource)
 
 	w.Header().Set("Content-Disposition: inline; filename=", filename)
 	w.Header().Set("Content-Type", "pdf")
@@ -69,6 +70,8 @@ func AmazonS3Handler(w http.ResponseWriter, r *http.Request, resource string, fi
 
 	fwd.ServeHTTP(w, r)
 }
+
+
 
 //AmazonS3URIHandler getnerate downlink link
 func AmazonS3URIHandler(w http.ResponseWriter, r *http.Request, resource string, filename string) {
@@ -92,3 +95,4 @@ func AmazonS3URIHandler(w http.ResponseWriter, r *http.Request, resource string,
 	http.Redirect(w, r, presignedURL.String(), http.StatusFound)
 
 }
+var varAmazonS3URIHandler = AmazonS3URIHandler

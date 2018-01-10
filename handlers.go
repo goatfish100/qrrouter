@@ -10,6 +10,7 @@ import (
 	"github.com/vulcand/oxy/forward"
 	"github.com/vulcand/oxy/testutils"
 )
+var varAmazonS3Handler = AmazonS3Handler
 
 //NewRouter - new Gorilla Router
 func NewRouter() *mux.Router {
@@ -76,6 +77,7 @@ func PROXYHandler(w http.ResponseWriter, r *http.Request, address string) {
 	fwd, _ := forward.New()
 	fwd.ServeHTTP(w, r)
 }
+var varPROXYHandler = PROXYHandler
 
 //UUIDHandler This handler is to handle _ send resource on thier way
 //either by proxying/forward the request or redirect
@@ -101,19 +103,20 @@ func UUIDHandler(w http.ResponseWriter, r *http.Request) {
 			r.URL = testutils.ParseURI(result.Address)
 			r.RequestURI = ""
 			log.Println("...http redirect called")
-			http.Redirect(w, r, result.Address, http.StatusFound)
+			http.Redirect(w, r, result.Address, http.StatusOK)
 			log.Println("redirecting")
 		} else if result.Action == "proxy" {
 			r.URL = testutils.ParseURI(result.Address)
 			r.RequestURI = ""
 			log.Println("...Proxying")
-			PROXYHandler(w, r, saddress)
+			varPROXYHandler(w, r, saddress)
 		} else if result.Action == "s3serve" {
 			log.Println("...AmazonS3Handler")
-			AmazonS3Handler(w, r, result.Address, result.Name)
+			varAmazonS3Handler(w, r, result.Address, result.Name)
+			//AmazonS3Handler(w, r, result.Address, result.Name)
 		} else if result.Action == "s3redirect" {
 			log.Println("...AmazonS3Handler")
-			AmazonS3URIHandler(w, r, result.Address, result.Name)
+			varAmazonS3URIHandler(w, r, result.Address, result.Name)
 		}
 		log.Println("no catch found")
 
@@ -122,5 +125,15 @@ func UUIDHandler(w http.ResponseWriter, r *http.Request) {
 		log.Println("UUIDHandler - no resource found for ", vars["key"])
 		// Serve the helper resource not found page
 		http.ServeFile(w, r, "./static/qrnotfound.html")
+	}
+
+	type s3 interface {
+		Speak() string
+	}
+	type s3Struct struct {
+		w http.ResponseWriter
+		r http.Request
+		Address string
+		resultName string
 	}
 }
