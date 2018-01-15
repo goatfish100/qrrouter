@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"testing"
 
 	"github.com/gorilla/mux"
@@ -58,7 +59,7 @@ func TestGetUUID1(t *testing.T) {
 
 	varRedirect = func(w http.ResponseWriter, r *http.Request, resource string, status int) {
 		t.Log("TestGetUUID1 redirect handler")
-		w.Write([]byte("Gorilla!\n" ))
+		w.Write([]byte("Gorilla!\n"))
 	}
 
 	path := "/uuid/444edd7c-d454-11e6-92b9-374c2fc3d623"
@@ -80,7 +81,7 @@ func TestGetUUID2(t *testing.T) {
 
 	varPROXYHandler = func(w http.ResponseWriter, r *http.Request, resource string) {
 		t.Log("TestGetUUID1 redirect handler")
-		w.Write([]byte("Gorilla!\n" ))
+		w.Write([]byte("Gorilla!\n"))
 	}
 
 	path := "/uuid/444edd7c-d454-11e6-92b9-374c2fc3d624"
@@ -94,6 +95,25 @@ func TestGetUUID2(t *testing.T) {
 	//assert.Equal(t, http.StatusFound, w.Code)
 
 	t.Log("the return string is bbxx", string(w.Body.Bytes()))
+
+}
+
+//TestProxyHandler - add more on this test later
+func TestPROXYHandler(t *testing.T) {
+	t.Parallel()
+	t.Log("TestPROXYHandler Test")
+
+	path := "http://www.google.com"
+	r, _ := http.NewRequest("GET", path, nil)
+
+	w := httptest.NewRecorder()
+	PROXYHandler(w, r, path)
+	session, err := CookieStore.Get(r, os.Getenv("COOKIE_SECRET"))
+
+	if err != nil {
+		t.Fatal(err)
+	}
+	assert.Equal(t, session.Values["redirection_url"], path)
 
 }
 
@@ -153,7 +173,6 @@ func TestUUIDRoute5(t *testing.T) {
 	//	assert.Equal(t, http.StatusFound, w.Code)
 
 	t.Log("the return string is bbxx", string(w.Body.Bytes()))
-
 
 }
 
