@@ -122,7 +122,7 @@ func UUIDHandler(w http.ResponseWriter, r *http.Request) {
 			log.Println("...AmazonS3URIHandler")
 			varAmazonS3URIHandler(w, r, result.Address, result.Name)
 		}
-		log.Println("no catch found")
+		log.Println("no catch found for ", result.Action)
 
 	} else {
 		//TODO - Forward/send to real not found resource

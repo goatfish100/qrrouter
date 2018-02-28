@@ -80,7 +80,7 @@ func TestGetUUID2(t *testing.T) {
 	t.Log("TestGetResource Test")
 
 	varPROXYHandler = func(w http.ResponseWriter, r *http.Request, resource string) {
-		t.Log("TestGetUUID1 redirect handler")
+		t.Log("TestGetUUID2 varProxyHandler")
 		w.Write([]byte("Gorilla!\n"))
 	}
 
