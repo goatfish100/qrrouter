@@ -11,7 +11,7 @@ before_script:
   - cd $GOPATH/src
   - ln -s $CI_PROJECT_DIR
   - cd $CI_PROJECT_NAME
-  - dep ensure -update
+  - dep ensure
 
 test:
   stage: test
