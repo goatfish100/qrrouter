@@ -104,10 +104,9 @@ func UUIDHandler(w http.ResponseWriter, r *http.Request) {
 		if result.Action == "redirect" {
 			r.URL = testutils.ParseURI(result.Address)
 			r.RequestURI = ""
-			log.Println("...http redirect called")
+			log.Println("...http redirect called", result.Address)
 
-			//http.Redirect(w, r, result.Address, http.StatusOK)
-			varRedirect(w, r, result.Address, http.StatusOK)
+			varRedirect(w, r, result.Address, http.StatusTemporaryRedirect)
 			log.Println("redirecting")
 		} else if result.Action == "proxy" {
 			r.URL = testutils.ParseURI(result.Address)
@@ -121,8 +120,9 @@ func UUIDHandler(w http.ResponseWriter, r *http.Request) {
 		} else if result.Action == "s3redirect" {
 			log.Println("...AmazonS3URIHandler")
 			varAmazonS3URIHandler(w, r, result.Address, result.Name)
+		} else {
+			log.Println("no catch found for ", result.Action)
 		}
-		log.Println("no catch found for ", result.Action)
 
 	} else {
 		//TODO - Forward/send to real not found resource
