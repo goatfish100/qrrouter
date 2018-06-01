@@ -115,11 +115,11 @@ func UUIDHandler(w http.ResponseWriter, r *http.Request) {
 			varPROXYHandler(w, r, saddress)
 		} else if result.Action == "s3serve" {
 			log.Println("...AmazonS3Handler")
-			varAmazonS3Handler(w, r, result.Address, result.Name)
+			varAmazonS3Handler(w, r, result.Uuid, result.Name)
 			//AmazonS3Handler(w, r, result.Address, result.Name)
 		} else if result.Action == "s3redirect" {
 			log.Println("...AmazonS3URIHandler")
-			varAmazonS3URIHandler(w, r, result.Address, result.Name)
+			varAmazonS3URIHandler(w, r, result.Uuid, result.Name)
 		} else {
 			log.Println("no catch found for ", result.Action)
 		}

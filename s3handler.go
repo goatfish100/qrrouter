@@ -14,52 +14,70 @@ import (
 	"github.com/vulcand/oxy/forward"
 )
 
-func s3connect(AwsBucket string, resource string) (*minio.Object, error) {
-	s3Client, err := minio.New(AwsURL, AwsKey, AwsPassPhrase, true)
+func s3connect() (*minio.Client, error) {
 
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
+	s3Client, error := minio.New(AwsURL, AwsKey, AwsPassPhrase, true)
+
+	if err != nil {
+		log.Println("Error s3Connect", error)
+	}
+
+	return s3Client, error
+
+}
+func s3getObjectBytes(resource string) ([]byte, error) {
+
+	s3Client, err := vars3connect()
+	if err != nil {
+		log.Println("Error s3getObject ", err)
+	}
 
 	reader, err := s3Client.GetObject(AwsBucket, resource)
-
 	defer reader.Close()
-	return reader, err
+	if err != nil {
+		log.Println("Error s3getObject ", err)
+	}
+	b, err := ioutil.ReadAll(reader)
+	if err != nil {
+		log.Println("Error s3getObject ", err)
+	}
 
+	return b, err
+}
+
+func s3PreSignedURL(resource string) (*url.URL, error) {
+
+	s3Client, err := vars3connect()
+	if err != nil {
+		log.Println("Error s3getObject ", err)
+	}
+
+	// Set request parameters
+	reqParams := make(url.Values)
+	reqParams.Set("response-content-disposition", "attachment; filename=\""+resource+"\"")
+
+	presignedURL, err := s3Client.PresignedGetObject(AwsBucket, resource, time.Duration(1000)*time.Second, reqParams)
+	if err != nil {
+		log.Println("Error s3getObject ", err)
+	}
+
+	return presignedURL, err
 }
 
 var vars3connect = s3connect
+var vars3getObjectBytes = s3getObjectBytes
+var vars3PreSignedURL = s3PreSignedURL
 
 //AmazonS3Handler proxy request home handler
 func AmazonS3Handler(w http.ResponseWriter, r *http.Request, resource string, filename string) {
 	fmt.Println("----AmazonS3Handler")
 
-	//s3Client, err := minio.New(AwsURL, AwsKey, AwsPassPhrase, true)
-	//
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
-	//
-	//reader, err := s3Client.GetObject(AwsBucket, resource)
-	//
-	//if err != nil {
-	//	log.Println("AmazonS3Handler Error openning S3 connection")
-	//	panic(err)
-	//}
-	//defer reader.Close()
-	//
-	//if err != nil {
-	//	log.Println("AmazonS3Handler Error closing S3 connection")
-	//
-	//	panic(err)
-	//}
-	//
-	reader, err := vars3connect(AwsBucket, resource)
+	b, err := vars3getObjectBytes(resource)
 
 	w.Header().Set("Content-Disposition: inline; filename=", filename)
 	w.Header().Set("Content-Type", "pdf")
 
-	b, err := ioutil.ReadAll(reader)
+	//b, err := ioutil.ReadAll(reader)
 
 	if err != nil {
 		log.Println("AmazonS3Handler readall err")
@@ -76,7 +94,9 @@ var varAmazonS3Handler = AmazonS3Handler
 
 //AmazonS3URIHandler getnerate downlink link
 func AmazonS3URIHandler(w http.ResponseWriter, r *http.Request, resource string, filename string) {
-	s3Client, err := minio.New(AwsURL, AwsKey, AwsPassPhrase, true)
+
+	// //s3Client, err := minio.New(AwsURL, AwsKey, AwsPassPhrase, true)
+	// s3Client, err := vars3connect()
 	if err != nil {
 		log.Println("AmazonS3URIHandler readall err")
 		panic(err)
@@ -87,13 +107,14 @@ func AmazonS3URIHandler(w http.ResponseWriter, r *http.Request, resource string,
 	reqParams.Set("response-content-disposition", "attachment; filename=\""+filename+"\"")
 
 	// Gernerate presigned get object url.
-	presignedURL, err := s3Client.PresignedGetObject(AwsBucket, resource, time.Duration(1000)*time.Second, reqParams)
+	signedURL, err := vars3PreSignedURL(resource)
+	//presignedURL, err := s3Client.PresignedGetObject(AwsBucket, resource, time.Duration(1000)*time.Second, reqParams)
 	if err != nil {
 		log.Println("AmazonS3URIHandler Error getting pre signed url")
 		panic(err)
 	}
-	log.Println("pre signed url", presignedURL)
-	http.Redirect(w, r, presignedURL.String(), http.StatusFound)
+	log.Println("pre signed url", signedURL.String())
+	http.Redirect(w, r, signedURL.String(), http.StatusFound)
 
 }
 
