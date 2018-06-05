@@ -2,13 +2,16 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"os"
 	"testing"
 
 	"github.com/gorilla/mux"
 	"github.com/stretchr/testify/assert"
+	"github.com/vulcand/oxy/forward"
 )
 
 var (
@@ -119,21 +122,38 @@ func TestPROXYHandler(t *testing.T) {
 
 //TestGetUUID3 - TODO - set up minio library
 //to mock
-// func TestGetUUID3(t *testing.T) {
-// 	t.Parallel()
-// 	t.Log("TestGetResource Test")
-//
-// 	path := "/uuid/444edd7c-d454-11e6-92b9-374c2fc3d626"
-// 	t.Log("TestGetResource the path is ", path)
-// 	r, _ := http.NewRequest("GET", path, nil)
-// 	w := httptest.NewRecorder()
-//
-// 	InvokeHandler(http.HandlerFunc(UUIDHandler), "/uuid/{key}", w, r)
-// 	assert.Equal(t, http.StatusOK, w.Code)
-//
-// 	t.Log("the return string is bbxx", string(w.Body.Bytes()))
-//
-// }
+func TestGetUUID3(t *testing.T) {
+	t.Parallel()
+	t.Log("TestGetResource Test")
+
+	path := "/uuid/444edd7c-d454-11e6-92b9-374c2fc3d626"
+	t.Log("TestGetResource the path is ", path)
+	r, _ := http.NewRequest("GET", path, nil)
+	w := httptest.NewRecorder()
+
+	//varAmazonS3Handler
+	varAmazonS3Handler = func(w http.ResponseWriter, r *http.Request, resource string, filename string) {
+		fmt.Println("----varAmazonS3Handler local function")
+
+		//b, err := vars3getObjectBytes(resource)
+		b := []byte("AAAA")
+		w.Header().Set("Content-Disposition: inline; filename=", filename)
+		w.Header().Set("Content-Type", "pdf")
+
+		//b, err := ioutil.ReadAll(reader)
+
+		w.Write(b)
+
+		fwd, _ := forward.New()
+
+		fwd.ServeHTTP(w, r)
+	}
+	InvokeHandler(http.HandlerFunc(UUIDHandler), "/uuid/{key}", w, r)
+	assert.Equal(t, http.StatusOK, w.Code)
+
+	t.Log("the return string is bbxx", string(w.Body.Bytes()))
+
+}
 
 //TestGetUUID4 - TODO - set up minio library
 //to mock
@@ -141,15 +161,31 @@ func TestGetUUID4(t *testing.T) {
 	t.Parallel()
 	t.Log("TestGetUUID4 S3 redirect Test")
 
-	varAmazonS3Handler = func(w http.ResponseWriter, r *http.Request, resource string, filename string) {
-		t.Log("AmazonS3Handler inside test handler")
-		w.Write([]byte("Gorilla!\n" + resource + filename))
-	}
-
-	path := "/uuid/444edd7c-d454-11e6-92b9-374c2fc3d626"
+	path := "/uuid/444edd7c-d454-11e6-92b9-374c2fc3d627"
 	t.Log("TestGetResource the path is ", path)
 	r, _ := http.NewRequest("GET", path, nil)
 	w := httptest.NewRecorder()
+
+	varAmazonS3Handler = func(w http.ResponseWriter, r *http.Request, resource string, filename string) {
+		// //s3Client, err := minio.New(AwsURL, AwsKey, AwsPassPhrase, true)
+		// s3Client, err := vars3connect()
+		if err != nil {
+			log.Println("AmazonS3URIHandler readall err")
+			panic(err)
+		}
+
+		// Set request parameters
+		reqParams := make(url.Values)
+		reqParams.Set("response-content-disposition", "attachment; filename=\""+filename+"\"")
+
+		//presignedURL, err := s3Client.PresignedGetObject(AwsBucket, resource, time.Duration(1000)*time.Second, reqParams)
+		if err != nil {
+			log.Println("AmazonS3URIHandler Error getting pre signed url")
+			panic(err)
+		}
+		w.Write([]byte("Gorilla!\n"))
+
+	}
 
 	InvokeHandler(http.HandlerFunc(UUIDHandler), "/uuid/{key}", w, r)
 	//	assert.Equal(t, http.StatusFound, w.Code)
